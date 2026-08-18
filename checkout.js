@@ -568,9 +568,69 @@ if (checkoutForm) {
             );
 
 
-            alert(
-                "Pedido recebido! Agora vamos conectar o pagamento."
-            );
+            // ============================
+// NÚMERO DO PEDIDO
+// ============================
+
+const now =
+    new Date();
+
+const date =
+    now.getFullYear().toString()
+    +
+    String(
+        now.getMonth() + 1
+    ).padStart(2, "0")
+    +
+    String(
+        now.getDate()
+    ).padStart(2, "0");
+
+
+const random =
+    Math.floor(
+        1000 +
+        Math.random() * 9000
+    );
+
+
+const orderNumber =
+    `${date}-${random}`;
+
+
+// ============================
+// SALVAR PEDIDO
+// ============================
+
+order.orderNumber =
+    orderNumber;
+
+
+order.createdAt =
+    now.toISOString();
+
+
+localStorage.setItem(
+    "lastOrder",
+    JSON.stringify(order)
+);
+
+
+// ============================
+// LIMPAR CARRINHO
+// ============================
+
+localStorage.removeItem(
+    "cart"
+);
+
+
+// ============================
+// IR PARA CONFIRMAÇÃO
+// ============================
+
+window.location.href =
+    "pedido.html";
 
         }
     );
