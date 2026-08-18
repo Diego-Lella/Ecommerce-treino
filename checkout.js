@@ -34,7 +34,7 @@ let checkoutCart =
 
 
 // ============================
-// FORMATAR PREÇO
+// FORMATAÇÃO
 // ============================
 
 function formatCheckoutPrice(price) {
@@ -51,7 +51,7 @@ function formatCheckoutPrice(price) {
 
 
 // ============================
-// CALCULAR SUBTOTAL
+// SUBTOTAL
 // ============================
 
 function calculateSubtotal() {
@@ -73,7 +73,7 @@ function calculateSubtotal() {
 
 
 // ============================
-// FRETE SELECIONADO
+// FRETE
 // ============================
 
 function getSelectedShipping() {
@@ -109,7 +109,7 @@ function getSelectedShipping() {
 
 
 // ============================
-// ATUALIZAR TOTAL
+// TOTAL
 // ============================
 
 function updateCheckoutTotal() {
@@ -117,10 +117,8 @@ function updateCheckoutTotal() {
     const subtotal =
         calculateSubtotal();
 
-
     const shipping =
         getSelectedShipping();
-
 
     const total =
         subtotal + shipping.price;
@@ -159,7 +157,7 @@ function updateCheckoutTotal() {
 
 
 // ============================
-// RENDERIZAR CHECKOUT
+// RENDERIZAR PRODUTOS
 // ============================
 
 function renderCheckout() {
@@ -187,57 +185,55 @@ function renderCheckout() {
     }
 
 
-    checkoutCart.forEach(
-        item => {
+    checkoutCart.forEach(item => {
 
-            const itemTotal =
-                Number(item.price) *
-                Number(item.quantity);
-
-
-            const element =
-                document.createElement("div");
+        const itemTotal =
+            Number(item.price) *
+            Number(item.quantity);
 
 
-            element.className =
-                "checkout-product";
+        const element =
+            document.createElement("div");
 
 
-            element.innerHTML = `
+        element.className =
+            "checkout-product";
 
-                <img
-                    src="${item.image || ""}"
-                    alt="${item.name || "Produto"}"
-                >
 
-                <div class="checkout-product-info">
+        element.innerHTML = `
 
-                    <strong>
-                        ${item.name || "Produto"}
-                    </strong>
+            <img
+                src="${item.image || ""}"
+                alt="${item.name || "Produto"}"
+            >
 
-                    <span>
-                        Quantidade:
-                        ${item.quantity}
-                    </span>
-
-                </div>
+            <div class="checkout-product-info">
 
                 <strong>
-                    R$ ${formatCheckoutPrice(
-                        itemTotal
-                    )}
+                    ${item.name || "Produto"}
                 </strong>
 
-            `;
+                <span>
+                    Quantidade:
+                    ${item.quantity}
+                </span>
+
+            </div>
+
+            <strong>
+                R$ ${formatCheckoutPrice(
+                    itemTotal
+                )}
+            </strong>
+
+        `;
 
 
-            checkoutItems.appendChild(
-                element
-            );
+        checkoutItems.appendChild(
+            element
+        );
 
-        }
-    );
+    });
 
 
     updateCheckoutTotal();
@@ -249,20 +245,14 @@ function renderCheckout() {
 // ALTERAR FRETE
 // ============================
 
-shippingOptions.forEach(
-    option => {
+shippingOptions.forEach(option => {
 
-        option.addEventListener(
-            "change",
-            () => {
+    option.addEventListener(
+        "change",
+        updateCheckoutTotal
+    );
 
-                updateCheckoutTotal();
-
-            }
-        );
-
-    }
-);
+});
 
 
 // ============================
@@ -306,10 +296,7 @@ if (cepInput) {
             if (value.length > 8) {
 
                 value =
-                    value.substring(
-                        0,
-                        8
-                    );
+                    value.substring(0, 8);
 
             }
 
@@ -317,10 +304,7 @@ if (cepInput) {
             if (value.length > 5) {
 
                 value =
-                    value.substring(
-                        0,
-                        5
-                    ) +
+                    value.substring(0, 5) +
                     "-" +
                     value.substring(5);
 
@@ -338,12 +322,8 @@ if (cepInput) {
                 );
 
 
-            if (
-                cleanCep.length !== 8
-            ) {
-
+            if (cleanCep.length !== 8) {
                 return;
-
             }
 
 
@@ -363,15 +343,6 @@ if (cepInput) {
                     );
 
 
-                if (!response.ok) {
-
-                    throw new Error(
-                        "Erro ao consultar CEP"
-                    );
-
-                }
-
-
                 const data =
                     await response.json();
 
@@ -386,34 +357,26 @@ if (cepInput) {
 
 
                 if (streetInput) {
-
                     streetInput.value =
                         data.logradouro || "";
-
                 }
 
 
                 if (neighborhoodInput) {
-
                     neighborhoodInput.value =
                         data.bairro || "";
-
                 }
 
 
                 if (cityInput) {
-
                     cityInput.value =
                         data.localidade || "";
-
                 }
 
 
                 if (stateInput) {
-
                     stateInput.value =
                         data.uf || "";
-
                 }
 
 
@@ -426,16 +389,10 @@ if (cepInput) {
 
             } catch (error) {
 
-                console.error(
-                    "Erro no CEP:",
-                    error
-                );
-
-
                 if (cepStatus) {
 
                     cepStatus.textContent =
-                        "Não foi possível encontrar o CEP.";
+                        "Não foi possível consultar o CEP.";
 
                 }
 
@@ -460,9 +417,7 @@ if (checkoutForm) {
             event.preventDefault();
 
 
-            if (
-                checkoutCart.length === 0
-            ) {
+            if (checkoutCart.length === 0) {
 
                 alert(
                     "Seu carrinho está vazio."
@@ -527,10 +482,8 @@ if (checkoutForm) {
 
                 },
 
-
                 products:
                     checkoutCart,
-
 
                 shipping: {
 
@@ -542,10 +495,8 @@ if (checkoutForm) {
 
                 },
 
-
                 subtotal:
                     subtotal,
-
 
                 total:
                     subtotal +
@@ -554,21 +505,15 @@ if (checkoutForm) {
             };
 
 
-            console.log(
-                "Pedido:",
-                order
-            );
-
-
             try {
 
                 // ============================
-                // API
+                // CHAMAR API
                 // ============================
 
                 const response =
                     await fetch(
-                        "/api/Orders",
+                        "/api/orders",
                         {
 
                             method: "POST",
@@ -590,49 +535,97 @@ if (checkoutForm) {
 
 
                 // ============================
-                // LER RESPOSTA
+                // RESPOSTA BRUTA
                 // ============================
 
                 const responseText =
-    await response.text();
-
-console.log(
-    "Resposta da API:",
-    responseText
-);
-
-let result;
-
-try {
-
-    result =
-        JSON.parse(responseText);
-
-} catch (error) {
-
-    throw new Error(
-        `API retornou uma resposta inválida: ${responseText}`
-    );
-
-}
-
-                console.log(
-                    "Resposta da API:",
-                    result
-                );
+                    await response.text();
 
 
                 // ============================
-                // ERRO
+                // TENTAR JSON
+                // ============================
+
+                let result = null;
+
+
+                try {
+
+                    result =
+                        JSON.parse(
+                            responseText
+                        );
+
+                } catch {
+
+                    // Não é JSON
+                    result = null;
+
+                }
+
+
+                // ============================
+                // ERRO DA API
                 // ============================
 
                 if (!response.ok) {
 
-                    throw new Error(
-                        result.error ||
-                        result.details ||
-                        "Erro ao criar pedido"
+                    let mensagem =
+                        "Erro ao finalizar pedido.";
+
+
+                    if (result?.error) {
+
+                        mensagem =
+                            result.error;
+
+                    }
+
+
+                    if (
+                        result?.details
+                    ) {
+
+                        mensagem +=
+                            "\n\nDetalhes:\n" +
+                            result.details;
+
+                    }
+
+
+                    if (
+                        !result &&
+                        responseText
+                    ) {
+
+                        mensagem =
+                            "A API retornou uma resposta inesperada.\n\n" +
+                            "Status: " +
+                            response.status;
+
+                    }
+
+
+                    alert(mensagem);
+
+                    return;
+
+                }
+
+
+                // ============================
+                // API RETORNOU TEXTO
+                // ============================
+
+                if (!result) {
+
+                    alert(
+                        "A API respondeu, mas não retornou JSON.\n\n" +
+                        "Status: " +
+                        response.status
                     );
+
+                    return;
 
                 }
 
@@ -641,9 +634,7 @@ try {
                 // SUCESSO
                 // ============================
 
-                if (
-                    result.orderId
-                ) {
+                if (result.orderId) {
 
                     localStorage.removeItem(
                         "cart"
@@ -659,19 +650,14 @@ try {
 
 
                 alert(
-                    "Pedido realizado com sucesso!"
+                    "Pedido enviado, mas a API não retornou o número do pedido."
                 );
+
 
             } catch (error) {
 
-                console.error(
-                    "Erro ao finalizar pedido:",
-                    error
-                );
-
-
                 alert(
-                    "Não foi possível finalizar o pedido:\n\n" +
+                    "Erro de conexão com a API.\n\n" +
                     error.message
                 );
 
@@ -688,3 +674,5 @@ try {
 // ============================
 
 renderCheckout();
+     
+                    
