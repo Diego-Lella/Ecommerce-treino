@@ -172,16 +172,33 @@
                                         CEP
                                     </label>
 
-                                    <input
-                                        type="text"
-                                        id="cep"
-                                        name="cep"
-                                        placeholder="00000-000"
-                                        inputmode="numeric"
-                                        autocomplete="postal-code"
-                                        maxlength="9"
-                                        required
-                                    >
+                                    <div class="form-group">
+
+    <label for="cep">
+        CEP
+    </label>
+
+    <div class="cep-wrapper">
+
+        <input
+            type="text"
+            id="cep"
+            name="cep"
+            placeholder="00000-000"
+            inputmode="numeric"
+            autocomplete="postal-code"
+            maxlength="9"
+            required
+        >
+
+        <span
+            id="cepStatus"
+            class="cep-status"
+        ></span>
+
+    </div>
+
+</div>
 
                                 </div>
 
@@ -374,7 +391,23 @@
 
                             </div>
 
+                             <div class="form-group">
 
+                                   <label for="neighborhood">
+                                       Bairro
+                                   </label>
+
+                                   <input
+                                   type="text"
+                                   id="neighborhood"
+                                   name="neighborhood"
+                                   placeholder="Seu bairro"
+                                   autocomplete="address-line2"
+                                   required
+                                  >
+
+                             </div>
+                            
                             <div class="form-group">
 
                                 <label for="city">
