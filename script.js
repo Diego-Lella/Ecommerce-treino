@@ -868,72 +868,31 @@ if (cartModal) {
 
 
 // ============================
-// CHECKOUT WHATSAPP
+// CHECKOUT 
 // ============================
 
 if (checkoutButton) {
 
     checkoutButton.addEventListener(
-        "click",
-        () => {
+    "click",
+    () => {
 
-            if (cart.length === 0) {
+        if (cart.length === 0) {
 
-                alert(
-                    "Seu carrinho está vazio."
-                );
-
-                return;
-
-            }
-
-
-            let message =
-                "Olá! Quero fazer um pedido:%0A%0A";
-
-
-            let total = 0;
-
-
-            cart.forEach(item => {
-
-                const subtotal =
-                    item.price *
-                    item.quantity;
-
-
-                total += subtotal;
-
-
-                message +=
-                    `${item.quantity}x ${item.name} - R$ ${formatPrice(subtotal)}%0A`;
-
-            });
-
-
-            message +=
-                `%0ATotal: R$ ${formatPrice(total)}`;
-
-
-            // TROQUE PELO WHATSAPP DA LOJA
-
-            const phone =
-                "5551999999999";
-
-
-            const url =
-                `https://wa.me/${phone}?text=${message}`;
-
-
-            window.open(
-                url,
-                "_blank"
+            alert(
+                "Seu carrinho está vazio."
             );
 
-        }
-    );
+            return;
 
-}
+        }
+
+
+        window.location.href =
+            "checkout.html";
+
+    }
+);
 
 
 // ============================
