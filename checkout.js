@@ -417,8 +417,30 @@ checkoutCart.forEach(
 const orderTotal =
     subtotal + shippingPrice;
 
-            const customer = {
+            const customer = { 
+const order = {
 
+    customer,
+
+    products:
+        checkoutCart,
+
+    shipping: {
+
+        name:
+            shippingName,
+
+        price:
+            shippingPrice
+
+    },
+
+    subtotal,
+
+    total:
+        orderTotal
+
+};
                 name:
                     formData.get("name"),
 
