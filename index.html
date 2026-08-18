@@ -89,21 +89,93 @@
 
                 <div class="section-title">
 
-                    <span>
-                        NOSSA LOJA
-                    </span>
+    <span>
+        NOSSA LOJA
+    </span>
 
-                    <h2>
-                        Produtos em destaque
-                    </h2>
+    <h2>
+        Produtos em destaque
+    </h2>
 
-                </div>
+</div>
 
-                <div
-                    id="productsGrid"
-                    class="products-grid"
-                ></div>
 
+<div class="shop-controls">
+
+    <div class="search-box">
+
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="🔎 Procurar produto..."
+        >
+
+    </div>
+
+
+    <div class="category-buttons">
+
+        <button
+            class="category-button active"
+            data-category="todos"
+        >
+            Todos
+        </button>
+
+        <button
+            class="category-button"
+            data-category="premium"
+        >
+            Premium
+        </button>
+
+        <button
+            class="category-button"
+            data-category="essencial"
+        >
+            Essenciais
+        </button>
+
+        <button
+            class="category-button"
+            data-category="especial"
+        >
+            Especiais
+        </button>
+
+    </div>
+
+
+    <select
+        id="sortSelect"
+        class="sort-select"
+    >
+
+        <option value="default">
+            Ordenar
+        </option>
+
+        <option value="price-low">
+            Menor preço
+        </option>
+
+        <option value="price-high">
+            Maior preço
+        </option>
+
+        <option value="name">
+            Nome A-Z
+        </option>
+
+    </select>
+
+</div>
+
+
+<div
+    id="productsGrid"
+    class="products-grid"
+></div>
             </div>
 
         </section>
