@@ -51,6 +51,17 @@ let cart = JSON.parse(
 const productsGrid =
     document.getElementById("productsGrid");
 
+const searchInput =
+    document.getElementById("searchInput");
+
+const sortSelect =
+    document.getElementById("sortSelect");
+
+const categoryButtons =
+    document.querySelectorAll(
+        ".category-button"
+    );
+
 const productContainer =
     document.getElementById("productContainer");
 
