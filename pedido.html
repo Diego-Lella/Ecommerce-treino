@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Confirmação do seu pedido."
+    >
+
+    <title>
+        Pedido confirmado
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<header class="site-header">
+
+    <div class="container header-content">
+
+        <a
+            href="index.html"
+            class="logo"
+        >
+            MINHA LOJA
+        </a>
+
+    </div>
+
+</header>
+
+
+
+<main class="order-page">
+
+    <div class="container">
+
+
+        <section class="order-success">
+
+
+            <div class="success-icon">
+                ✓
+            </div>
+
+
+            <span class="success-label">
+                PEDIDO RECEBIDO
+            </span>
+
+
+            <h1>
+                Obrigado pela sua compra!
+            </h1>
+
+
+            <p>
+                Seu pedido foi registrado
+                com sucesso.
+            </p>
+
+
+            <div class="order-number-box">
+
+                <span>
+                    Número do pedido
+                </span>
+
+                <strong id="orderNumber">
+                    —
+                </strong>
+
+            </div>
+
+
+        </section>
+
+
+
+        <section class="order-details">
+
+
+            <h2>
+                Resumo do pedido
+            </h2>
+
+
+            <div id="orderProducts">
+
+            </div>
+
+
+
+            <div class="order-values">
+
+
+                <div>
+
+                    <span>
+                        Subtotal
+                    </span>
+
+                    <strong id="orderSubtotal">
+                        R$ 0,00
+                    </strong>
+
+                </div>
+
+
+
+                <div>
+
+                    <span>
+                        Frete
+                    </span>
+
+                    <strong id="orderShipping">
+                        R$ 0,00
+                    </strong>
+
+                </div>
+
+
+
+                <div class="order-final-total">
+
+                    <span>
+                        Total
+                    </span>
+
+                    <strong id="orderTotal">
+                        R$ 0,00
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <section class="order-address">
+
+
+            <h2>
+                Endereço de entrega
+            </h2>
+
+
+            <p id="orderCustomer">
+
+            </p>
+
+
+        </section>
+
+
+
+        <a
+            href="index.html"
+            class="button order-back"
+        >
+            Voltar para a loja
+        </a>
+
+
+    </div>
+
+</main>
+
+
+
+<script src="pedido.js"></script>
+
+
+</body>
+
+</html>
