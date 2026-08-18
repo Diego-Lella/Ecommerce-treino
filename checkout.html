@@ -29,550 +29,657 @@
 
 <body>
 
-    <header class="site-header">
 
-        <div class="container header-content">
+<header class="site-header">
 
-            <a
-                href="index.html"
-                class="logo"
-            >
-                MINHA LOJA
-            </a>
+    <div class="container header-content">
 
-            <a
-                href="index.html"
-                class="back-link"
-            >
-                ← Continuar comprando
-            </a>
-
-        </div>
-
-    </header>
-
-
-    <main class="checkout-page">
-
-        <div class="container">
-
-            <div class="checkout-header">
-
-                <span>
-                    FINALIZAÇÃO
-                </span>
-
-                <h1>
-                    Finalize seu pedido
-                </h1>
-
-                <p>
-                    Preencha seus dados para
-                    continuar.
-                </p>
-
-            </div>
-
-
-            <div class="checkout-layout">
-
-
-                <!-- =========================
-                     FORMULÁRIO
-                ========================== -->
-
-                <section class="checkout-form">
-
-                    <form id="checkoutForm">
-
-
-                        <div class="checkout-section">
-
-                            <h2>
-                                Seus dados
-                            </h2>
-
-
-                            <div class="form-group">
-
-                                <label for="name">
-                                    Nome completo
-                                </label>
-
-                                <input
-                                    type="text"
-                                    id="name"
-                                    name="name"
-                                    placeholder="Seu nome completo"
-                                    autocomplete="name"
-                                    required
-                                >
-
-                            </div>
-
-
-                            <div class="form-row">
-
-                                <div class="form-group">
-
-                                    <label for="email">
-                                        E-mail
-                                    </label>
-
-                                    <input
-                                        type="email"
-                                        id="email"
-                                        name="email"
-                                        placeholder="seu@email.com"
-                                        autocomplete="email"
-                                        required
-                                    >
-
-                                </div>
-
-
-                                <div class="form-group">
-
-                                    <label for="phone">
-                                        WhatsApp
-                                    </label>
-
-                                    <input
-                                        type="tel"
-                                        id="phone"
-                                        name="phone"
-                                        placeholder="(51) 99999-9999"
-                                        autocomplete="tel"
-                                        required
-                                    >
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- =========================
-                             ENDEREÇO
-                        ========================== -->
-
-                        <div class="checkout-section">
-
-                            <h2>
-                                Endereço de entrega
-                            </h2>
-
-
-                            <div class="form-row">
-
-                                <div class="form-group">
-
-                                    <label for="cep">
-                                        CEP
-                                    </label>
-
-                                    <div class="form-group">
-
-    <label for="cep">
-        CEP
-    </label>
-
-    <div class="cep-wrapper">
-
-        <input
-            type="text"
-            id="cep"
-            name="cep"
-            placeholder="00000-000"
-            inputmode="numeric"
-            autocomplete="postal-code"
-            maxlength="9"
-            required
+        <a
+            href="index.html"
+            class="logo"
         >
+            MINHA LOJA
+        </a>
 
-        <span
-            id="cepStatus"
-            class="cep-status"
-        ></span>
+
+        <a
+            href="index.html"
+            class="back-link"
+        >
+            ← Continuar comprando
+        </a>
 
     </div>
 
-</div>
-
-                                </div>
+</header>
 
 
-                                <div class="form-group">
 
-                                    <label for="state">
-                                        Estado
-                                    </label>
+<main class="checkout-page">
 
-                                    <select
-                                        id="state"
-                                        name="state"
-                                        autocomplete="address-level1"
-                                        required
-                                    >
-
-                                        <option value="">
-                                            Selecione
-                                        </option>
-
-                                        <option value="AC">
-                                            Acre
-                                        </option>
-
-                                        <option value="AL">
-                                            Alagoas
-                                        </option>
-
-                                        <option value="AP">
-                                            Amapá
-                                        </option>
-
-                                        <option value="AM">
-                                            Amazonas
-                                        </option>
-
-                                        <option value="BA">
-                                            Bahia
-                                        </option>
-
-                                        <option value="CE">
-                                            Ceará
-                                        </option>
-
-                                        <option value="DF">
-                                            Distrito Federal
-                                        </option>
-
-                                        <option value="ES">
-                                            Espírito Santo
-                                        </option>
-
-                                        <option value="GO">
-                                            Goiás
-                                        </option>
-
-                                        <option value="MA">
-                                            Maranhão
-                                        </option>
-
-                                        <option value="MT">
-                                            Mato Grosso
-                                        </option>
-
-                                        <option value="MS">
-                                            Mato Grosso do Sul
-                                        </option>
-
-                                        <option value="MG">
-                                            Minas Gerais
-                                        </option>
-
-                                        <option value="PA">
-                                            Pará
-                                        </option>
-
-                                        <option value="PB">
-                                            Paraíba
-                                        </option>
-
-                                        <option value="PR">
-                                            Paraná
-                                        </option>
-
-                                        <option value="PE">
-                                            Pernambuco
-                                        </option>
-
-                                        <option value="PI">
-                                            Piauí
-                                        </option>
-
-                                        <option value="RJ">
-                                            Rio de Janeiro
-                                        </option>
-
-                                        <option value="RN">
-                                            Rio Grande do Norte
-                                        </option>
-
-                                        <option value="RS">
-                                            Rio Grande do Sul
-                                        </option>
-
-                                        <option value="RO">
-                                            Rondônia
-                                        </option>
-
-                                        <option value="RR">
-                                            Roraima
-                                        </option>
-
-                                        <option value="SC">
-                                            Santa Catarina
-                                        </option>
-
-                                        <option value="SP">
-                                            São Paulo
-                                        </option>
-
-                                        <option value="SE">
-                                            Sergipe
-                                        </option>
-
-                                        <option value="TO">
-                                            Tocantins
-                                        </option>
-
-                                    </select>
-
-                                </div>
-
-                            </div>
+    <div class="container">
 
 
-                            <div class="form-group">
+        <!-- CABEÇALHO -->
 
-                                <label for="street">
-                                    Rua
-                                </label>
+        <div class="checkout-header">
 
-                                <input
-                                    type="text"
-                                    id="street"
-                                    name="street"
-                                    placeholder="Nome da rua"
-                                    autocomplete="street-address"
-                                    required
-                                >
+            <span>
+                FINALIZAÇÃO
+            </span>
 
-                            </div>
+            <h1>
+                Finalize seu pedido
+            </h1>
 
+            <p>
+                Preencha seus dados para continuar.
+            </p>
 
-                            <div class="form-row">
-
-                                <div class="form-group">
-
-                                    <label for="number">
-                                        Número
-                                    </label>
-
-                                    <input
-                                        type="text"
-                                        id="number"
-                                        name="number"
-                                        placeholder="123"
-                                        autocomplete="address-line2"
-                                        required
-                                    >
-
-                                </div>
+        </div>
 
 
-                                <div class="form-group">
 
-                                    <label for="complement">
-                                        Complemento
-                                    </label>
+        <div class="checkout-layout">
 
-                                    <input
-                                        type="text"
-                                        id="complement"
-                                        name="complement"
-                                        placeholder="Apto, casa..."
-                                        autocomplete="address-line2"
-                                    >
 
-                                </div>
+            <!-- =========================
+                 FORMULÁRIO
+            ========================== -->
 
-                            </div>
+            <section class="checkout-form">
 
-                             <div class="form-group">
 
-                                   <label for="neighborhood">
-                                       Bairro
-                                   </label>
+                <form id="checkoutForm">
 
-                                   <input
-                                   type="text"
-                                   id="neighborhood"
-                                   name="neighborhood"
-                                   placeholder="Seu bairro"
-                                   autocomplete="address-line2"
-                                   required
-                                  >
 
-                             </div>
-                            
-                            <div class="form-group">
+                    <!-- DADOS -->
 
-                                <label for="city">
-                                    Cidade
-                                </label>
+                    <div class="checkout-section">
 
-                                <input
-                                    type="text"
-                                    id="city"
-                                    name="city"
-                                    placeholder="Sua cidade"
-                                    autocomplete="address-level2"
-                                    required
-                                >
+                        <h2>
+                            Seus dados
+                        </h2>
 
-                            </div>
+
+                        <div class="form-group">
+
+                            <label for="name">
+                                Nome completo
+                            </label>
+
+                            <input
+                                type="text"
+                                id="name"
+                                name="name"
+                                placeholder="Seu nome completo"
+                                autocomplete="name"
+                                required
+                            >
 
                         </div>
 
 
-                        <button
-                            type="submit"
-                            class="button checkout-submit"
-                        >
-                            Finalizar pedido
-                        </button>
+
+                        <div class="form-row">
 
 
-                    </form>
+                            <div class="form-group">
 
-                </section>
+                                <label for="email">
+                                    E-mail
+                                </label>
+
+                                <input
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    placeholder="seu@email.com"
+                                    autocomplete="email"
+                                    required
+                                >
+
+                            </div>
 
 
-                <!-- =========================
-                     RESUMO
-                ========================== -->
 
-                <aside class="checkout-summary">
+                            <div class="form-group">
 
-                    <h2>
-                        Seu pedido
-                    </h2>
+                                <label for="phone">
+                                    WhatsApp
+                                </label>
+
+                                <input
+                                    type="tel"
+                                    id="phone"
+                                    name="phone"
+                                    placeholder="(51) 99999-9999"
+                                    autocomplete="tel"
+                                    required
+                                >
+
+                            </div>
 
 
-                    <div id="checkoutItems">
+                        </div>
 
                     </div>
 
 
-                    <div class="checkout-shipping">
 
-    <h3>
-        Entrega
-    </h3>
+                    <!-- =========================
+                         ENDEREÇO
+                    ========================== -->
+
+                    <div class="checkout-section">
 
 
-    <label class="shipping-option">
+                        <h2>
+                            Endereço de entrega
+                        </h2>
 
-        <input
-            type="radio"
-            name="shipping"
-            value="0"
-            data-name="Retirada"
-        >
 
-        <div>
 
-            <strong>
-                Retirada
-            </strong>
+                        <!-- CEP + ESTADO -->
 
-            <span>
-                Grátis
-            </span>
+                        <div class="form-row">
+
+
+                            <div class="form-group">
+
+                                <label for="cep">
+                                    CEP
+                                </label>
+
+
+                                <div class="cep-wrapper">
+
+                                    <input
+                                        type="text"
+                                        id="cep"
+                                        name="cep"
+                                        placeholder="00000-000"
+                                        inputmode="numeric"
+                                        autocomplete="postal-code"
+                                        maxlength="9"
+                                        required
+                                    >
+
+
+                                    <span
+                                        id="cepStatus"
+                                        class="cep-status"
+                                    ></span>
+
+                                </div>
+
+                            </div>
+
+
+
+                            <div class="form-group">
+
+                                <label for="state">
+                                    Estado
+                                </label>
+
+
+                                <select
+                                    id="state"
+                                    name="state"
+                                    autocomplete="address-level1"
+                                    required
+                                >
+
+                                    <option value="">
+                                        Selecione
+                                    </option>
+
+                                    <option value="AC">
+                                        Acre
+                                    </option>
+
+                                    <option value="AL">
+                                        Alagoas
+                                    </option>
+
+                                    <option value="AP">
+                                        Amapá
+                                    </option>
+
+                                    <option value="AM">
+                                        Amazonas
+                                    </option>
+
+                                    <option value="BA">
+                                        Bahia
+                                    </option>
+
+                                    <option value="CE">
+                                        Ceará
+                                    </option>
+
+                                    <option value="DF">
+                                        Distrito Federal
+                                    </option>
+
+                                    <option value="ES">
+                                        Espírito Santo
+                                    </option>
+
+                                    <option value="GO">
+                                        Goiás
+                                    </option>
+
+                                    <option value="MA">
+                                        Maranhão
+                                    </option>
+
+                                    <option value="MT">
+                                        Mato Grosso
+                                    </option>
+
+                                    <option value="MS">
+                                        Mato Grosso do Sul
+                                    </option>
+
+                                    <option value="MG">
+                                        Minas Gerais
+                                    </option>
+
+                                    <option value="PA">
+                                        Pará
+                                    </option>
+
+                                    <option value="PB">
+                                        Paraíba
+                                    </option>
+
+                                    <option value="PR">
+                                        Paraná
+                                    </option>
+
+                                    <option value="PE">
+                                        Pernambuco
+                                    </option>
+
+                                    <option value="PI">
+                                        Piauí
+                                    </option>
+
+                                    <option value="RJ">
+                                        Rio de Janeiro
+                                    </option>
+
+                                    <option value="RN">
+                                        Rio Grande do Norte
+                                    </option>
+
+                                    <option value="RS">
+                                        Rio Grande do Sul
+                                    </option>
+
+                                    <option value="RO">
+                                        Rondônia
+                                    </option>
+
+                                    <option value="RR">
+                                        Roraima
+                                    </option>
+
+                                    <option value="SC">
+                                        Santa Catarina
+                                    </option>
+
+                                    <option value="SP">
+                                        São Paulo
+                                    </option>
+
+                                    <option value="SE">
+                                        Sergipe
+                                    </option>
+
+                                    <option value="TO">
+                                        Tocantins
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                        </div>
+
+
+
+                        <!-- RUA -->
+
+                        <div class="form-group">
+
+                            <label for="street">
+                                Rua
+                            </label>
+
+                            <input
+                                type="text"
+                                id="street"
+                                name="street"
+                                placeholder="Nome da rua"
+                                autocomplete="street-address"
+                                required
+                            >
+
+                        </div>
+
+
+
+                        <!-- BAIRRO -->
+
+                        <div class="form-group">
+
+                            <label for="neighborhood">
+                                Bairro
+                            </label>
+
+                            <input
+                                type="text"
+                                id="neighborhood"
+                                name="neighborhood"
+                                placeholder="Seu bairro"
+                                autocomplete="address-line2"
+                                required
+                            >
+
+                        </div>
+
+
+
+                        <!-- NÚMERO + COMPLEMENTO -->
+
+                        <div class="form-row">
+
+
+                            <div class="form-group">
+
+                                <label for="number">
+                                    Número
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="number"
+                                    name="number"
+                                    placeholder="123"
+                                    autocomplete="address-line2"
+                                    required
+                                >
+
+                            </div>
+
+
+
+                            <div class="form-group">
+
+                                <label for="complement">
+                                    Complemento
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="complement"
+                                    name="complement"
+                                    placeholder="Apto, casa..."
+                                    autocomplete="address-line2"
+                                >
+
+                            </div>
+
+
+                        </div>
+
+
+
+                        <!-- CIDADE -->
+
+                        <div class="form-group">
+
+                            <label for="city">
+                                Cidade
+                            </label>
+
+                            <input
+                                type="text"
+                                id="city"
+                                name="city"
+                                placeholder="Sua cidade"
+                                autocomplete="address-level2"
+                                required
+                            >
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <!-- BOTÃO -->
+
+                    <button
+                        type="submit"
+                        class="button checkout-submit"
+                    >
+
+                        Finalizar pedido
+
+                    </button>
+
+
+                </form>
+
+
+            </section>
+
+
+
+            <!-- =========================
+                 RESUMO DO PEDIDO
+            ========================== -->
+
+            <aside class="checkout-summary">
+
+
+                <h2>
+                    Seu pedido
+                </h2>
+
+
+
+                <!-- PRODUTOS -->
+
+                <div
+                    id="checkoutItems"
+                ></div>
+
+
+
+                <!-- FRETE -->
+
+                <div class="checkout-shipping">
+
+
+                    <h3>
+                        Entrega
+                    </h3>
+
+
+
+                    <label class="shipping-option">
+
+
+                        <input
+                            type="radio"
+                            name="shipping"
+                            value="0"
+                            data-name="Retirada"
+                        >
+
+
+                        <div>
+
+                            <strong>
+                                Retirada
+                            </strong>
+
+                            <span>
+                                Grátis
+                            </span>
+
+                        </div>
+
+
+                    </label>
+
+
+
+                    <label class="shipping-option">
+
+
+                        <input
+                            type="radio"
+                            name="shipping"
+                            value="15"
+                            data-name="Entrega econômica"
+                            checked
+                        >
+
+
+                        <div>
+
+                            <strong>
+                                Entrega econômica
+                            </strong>
+
+                            <span>
+                                R$ 15,00
+                            </span>
+
+                        </div>
+
+
+                    </label>
+
+
+
+                    <label class="shipping-option">
+
+
+                        <input
+                            type="radio"
+                            name="shipping"
+                            value="29.90"
+                            data-name="Entrega expressa"
+                        >
+
+
+                        <div>
+
+                            <strong>
+                                Entrega expressa
+                            </strong>
+
+                            <span>
+                                R$ 29,90
+                            </span>
+
+                        </div>
+
+
+                    </label>
+
+
+                </div>
+
+
+
+                <!-- SUBTOTAL -->
+
+                <div class="checkout-price-row">
+
+
+                    <span>
+                        Subtotal
+                    </span>
+
+
+                    <strong
+                        id="checkoutSubtotal"
+                    >
+                        R$ 0,00
+                    </strong>
+
+
+                </div>
+
+
+
+                <!-- FRETE -->
+
+                <div class="checkout-price-row">
+
+
+                    <span>
+                        Frete
+                    </span>
+
+
+                    <strong
+                        id="checkoutShipping"
+                    >
+                        R$ 15,00
+                    </strong>
+
+
+                </div>
+
+
+
+                <!-- TOTAL -->
+
+                <div class="checkout-total">
+
+
+                    <span>
+                        Total
+                    </span>
+
+
+                    <strong
+                        id="checkoutTotal"
+                    >
+                        R$ 0,00
+                    </strong>
+
+
+                </div>
+
+
+            </aside>
+
 
         </div>
 
-    </label>
+    </div>
+
+</main>
 
 
-    <label class="shipping-option">
 
-        <input
-            type="radio"
-            name="shipping"
-            value="15"
-            data-name="Entrega econômica"
-            checked
-        >
+<script src="script.js"></script>
 
-        <div>
-
-            <strong>
-                Entrega econômica
-            </strong>
-
-            <span>
-                R$ 15,00
-            </span>
-
-        </div>
-
-    </label>
+<script src="checkout.js"></script>
 
 
-    <label class="shipping-option">
+</body>
 
-        <input
-            type="radio"
-            name="shipping"
-            value="29.90"
-            data-name="Entrega expressa"
-        >
-
-        <div>
-
-            <strong>
-                Entrega expressa
-            </strong>
-
-            <span>
-                R$ 29,90
-            </span>
-
-        </div>
-
-    </label>
-
-</div>
-
-
-<div class="checkout-price-row">
-
-    <span>
-        Subtotal
-    </span>
-
-    <strong id="checkoutSubtotal">
-        R$ 0,00
-    </strong>
-
-</div>
-
-
-<div class="checkout-price-row">
-
-    <span>
-        Frete
-    </span>
-
-    <strong id="checkoutShipping">
-        R$ 15,00
-    </strong>
-
-</div>
-
-
-<div class="checkout-total">
-
-    <span>
-        Total
-    </span>
-
-    <strong id="checkoutTotal">
-        R$ 0,00
-    </strong>
-
-</div>
+    </html>
