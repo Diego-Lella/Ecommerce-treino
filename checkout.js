@@ -39,7 +39,7 @@ let checkoutCart =
 
 function formatCheckoutPrice(price) {
 
-    return price.toLocaleString(
+    return Number(price).toLocaleString(
         "pt-BR",
         {
             minimumFractionDigits: 2,
@@ -60,7 +60,10 @@ function calculateSubtotal() {
         (total, item) => {
 
             return total +
-                (item.price * item.quantity);
+                (
+                    Number(item.price) *
+                    Number(item.quantity)
+                );
 
         },
         0
@@ -70,7 +73,7 @@ function calculateSubtotal() {
 
 
 // ============================
-// PEGAR FRETE
+// FRETE SELECIONADO
 // ============================
 
 function getSelectedShipping() {
@@ -94,10 +97,11 @@ function getSelectedShipping() {
     return {
 
         name:
-            selected.dataset.name,
+            selected.dataset.name ||
+            "Entrega",
 
         price:
-            Number(selected.value)
+            Number(selected.value) || 0
 
     };
 
@@ -171,32 +175,10 @@ function renderCheckout() {
     if (checkoutCart.length === 0) {
 
         checkoutItems.innerHTML = `
-
             <div class="checkout-empty">
-
-                <p>
-                    Seu carrinho está vazio.
-                </p>
-
-                <a
-                    href="index.html"
-                    class="back-link"
-                >
-                    Voltar para a loja
-                </a>
-
+                Seu carrinho está vazio.
             </div>
-
         `;
-
-
-        if (checkoutForm) {
-
-            checkoutForm.style.display =
-                "none";
-
-        }
-
 
         updateCheckoutTotal();
 
@@ -205,26 +187,16 @@ function renderCheckout() {
     }
 
 
-    if (checkoutForm) {
-
-        checkoutForm.style.display =
-            "";
-
-    }
-
-
     checkoutCart.forEach(
         item => {
 
-            const subtotal =
-                item.price *
-                item.quantity;
+            const itemTotal =
+                Number(item.price) *
+                Number(item.quantity);
 
 
             const element =
-                document.createElement(
-                    "div"
-                );
+                document.createElement("div");
 
 
             element.className =
@@ -234,32 +206,26 @@ function renderCheckout() {
             element.innerHTML = `
 
                 <img
-                    src="${item.image}?auto=format&fit=crop&w=160&q=70"
-                    alt="${item.name}"
-                    width="70"
-                    height="70"
-                    loading="lazy"
-                    decoding="async"
+                    src="${item.image || ""}"
+                    alt="${item.name || "Produto"}"
                 >
 
                 <div class="checkout-product-info">
 
                     <strong>
-                        ${item.name}
+                        ${item.name || "Produto"}
                     </strong>
 
                     <span>
-                        ${item.quantity}x
-                        R$ ${formatCheckoutPrice(
-                            item.price
-                        )}
+                        Quantidade:
+                        ${item.quantity}
                     </span>
 
                 </div>
 
                 <strong>
                     R$ ${formatCheckoutPrice(
-                        subtotal
+                        itemTotal
                     )}
                 </strong>
 
@@ -280,7 +246,7 @@ function renderCheckout() {
 
 
 // ============================
-// TROCAR FRETE
+// ALTERAR FRETE
 // ============================
 
 shippingOptions.forEach(
@@ -328,25 +294,40 @@ if (cepInput) {
 
     cepInput.addEventListener(
         "input",
-        async event => {
+        async () => {
 
             let value =
-                event.target.value
-                    .replace(/\D/g, "")
-                    .slice(0, 8);
+                cepInput.value.replace(
+                    /\D/g,
+                    ""
+                );
+
+
+            if (value.length > 8) {
+
+                value =
+                    value.substring(
+                        0,
+                        8
+                    );
+
+            }
 
 
             if (value.length > 5) {
 
                 value =
-                    value.slice(0, 5)
-                    + "-"
-                    + value.slice(5);
+                    value.substring(
+                        0,
+                        5
+                    ) +
+                    "-" +
+                    value.substring(5);
 
             }
 
 
-            event.target.value =
+            cepInput.value =
                 value;
 
 
@@ -361,13 +342,6 @@ if (cepInput) {
                 cleanCep.length !== 8
             ) {
 
-                if (cepStatus) {
-
-                    cepStatus.textContent =
-                        "";
-
-                }
-
                 return;
 
             }
@@ -376,7 +350,7 @@ if (cepInput) {
             if (cepStatus) {
 
                 cepStatus.textContent =
-                    "Buscando...";
+                    "Buscando endereço...";
 
             }
 
@@ -385,14 +359,14 @@ if (cepInput) {
 
                 const response =
                     await fetch(
-                        `https://brasilapi.com.br/api/cep/v2/${cleanCep}`
+                        `https://viacep.com.br/ws/${cleanCep}/json/`
                     );
 
 
                 if (!response.ok) {
 
                     throw new Error(
-                        "CEP não encontrado"
+                        "Erro ao consultar CEP"
                     );
 
                 }
@@ -402,20 +376,27 @@ if (cepInput) {
                     await response.json();
 
 
-                if (streetInput) {
+                if (data.erro) {
 
-                    streetInput.value =
-                        data.street || "";
+                    throw new Error(
+                        "CEP não encontrado"
+                    );
 
                 }
 
 
-                if (
-                    neighborhoodInput
-                ) {
+                if (streetInput) {
+
+                    streetInput.value =
+                        data.logradouro || "";
+
+                }
+
+
+                if (neighborhoodInput) {
 
                     neighborhoodInput.value =
-                        data.neighborhood || "";
+                        data.bairro || "";
 
                 }
 
@@ -423,7 +404,7 @@ if (cepInput) {
                 if (cityInput) {
 
                     cityInput.value =
-                        data.city || "";
+                        data.localidade || "";
 
                 }
 
@@ -431,7 +412,7 @@ if (cepInput) {
                 if (stateInput) {
 
                     stateInput.value =
-                        data.state || "";
+                        data.uf || "";
 
                 }
 
@@ -439,15 +420,14 @@ if (cepInput) {
                 if (cepStatus) {
 
                     cepStatus.textContent =
-                        "✓ Endereço encontrado";
+                        "Endereço encontrado.";
 
                 }
 
-            }
-            catch (error) {
+            } catch (error) {
 
                 console.error(
-                    "Erro ao consultar CEP:",
+                    "Erro no CEP:",
                     error
                 );
 
@@ -455,7 +435,7 @@ if (cepInput) {
                 if (cepStatus) {
 
                     cepStatus.textContent =
-                        "CEP não encontrado";
+                        "Não foi possível encontrar o CEP.";
 
                 }
 
@@ -468,14 +448,14 @@ if (cepInput) {
 
 
 // ============================
-// FORMULÁRIO
+// FINALIZAR PEDIDO
 // ============================
 
 if (checkoutForm) {
 
     checkoutForm.addEventListener(
         "submit",
-       async event => {
+        async event => {
 
             event.preventDefault();
 
@@ -499,43 +479,6 @@ if (checkoutForm) {
                 );
 
 
-            const customer = {
-
-                name:
-                    formData.get("name"),
-
-                email:
-                    formData.get("email"),
-
-                phone:
-                    formData.get("phone"),
-
-                cep:
-                    formData.get("cep"),
-
-                state:
-                    formData.get("state"),
-
-                street:
-                    formData.get("street"),
-
-                number:
-                    formData.get("number"),
-
-                complement:
-                    formData.get("complement"),
-
-                neighborhood:
-                    formData.get(
-                        "neighborhood"
-                    ),
-
-                city:
-                    formData.get("city")
-
-            };
-
-
             const shipping =
                 getSelectedShipping();
 
@@ -546,14 +489,63 @@ if (checkoutForm) {
 
             const order = {
 
-                customer,
+                customer: {
+
+                    name:
+                        formData.get("name"),
+
+                    email:
+                        formData.get("email"),
+
+                    phone:
+                        formData.get("phone"),
+
+                    cep:
+                        formData.get("cep"),
+
+                    street:
+                        formData.get("street"),
+
+                    number:
+                        formData.get("number"),
+
+                    complement:
+                        formData.get(
+                            "complement"
+                        ),
+
+                    neighborhood:
+                        formData.get(
+                            "neighborhood"
+                        ),
+
+                    city:
+                        formData.get("city"),
+
+                    state:
+                        formData.get("state")
+
+                },
+
 
                 products:
                     checkoutCart,
 
-                shipping,
 
-                subtotal,
+                shipping: {
+
+                    name:
+                        shipping.name,
+
+                    price:
+                        shipping.price
+
+                },
+
+
+                subtotal:
+                    subtotal,
+
 
                 total:
                     subtotal +
@@ -568,136 +560,94 @@ if (checkoutForm) {
             );
 
 
-            // ============================
-// NÚMERO DO PEDIDO
-// ============================
+            try {
 
-const now =
-    new Date();
+                const response =
+                    await fetch(
+                        "/api/orders",
+                        {
 
-const date =
-    now.getFullYear().toString()
-    +
-    String(
-        now.getMonth() + 1
-    ).padStart(2, "0")
-    +
-    String(
-        now.getDate()
-    ).padStart(2, "0");
+                            method: "POST",
 
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
 
-const random =
-    Math.floor(
-        1000 +
-        Math.random() * 9000
-    );
+                            body:
+                                JSON.stringify(
+                                    order
+                                )
+
+                        }
+                    );
 
 
-const orderNumber =
-    `${date}-${random}`;
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Erro ao criar pedido"
+                    );
+
+                }
 
 
-// ============================
-// SALVAR PEDIDO
-// ============================
-
-order.orderNumber =
-    orderNumber;
+                const result =
+                    await response.json();
 
 
-order.createdAt =
-    now.toISOString();
+                console.log(
+                    "Pedido criado:",
+                    result
+                );
 
 
-// ============================
-// ENVIAR PEDIDO PARA A API
-// ============================
+                if (
+                    result.orderId
+                ) {
 
-try {
+                    localStorage.removeItem(
+                        "cart"
+                    );
 
-    const response =
-        await fetch(
-            "/api/orders",
-            {
-                method: "POST",
 
-                headers: {
-                    "Content-Type":
-                        "application/json"
-                },
+                    window.location.href =
+                        `pedido.html?id=${result.orderId}`;
 
-                body:
-                    JSON.stringify(order)
+                    return;
+
+                }
+
+
+                alert(
+                    "Pedido realizado com sucesso!"
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "Erro ao finalizar pedido:",
+                    error
+                );
+
+
+                alert(
+                    "Não foi possível finalizar o pedido. Tente novamente."
+                );
+
             }
-        );
 
-
-    const data =
-        await response.json();
-
-
-    if (!response.ok) {
-
-        console.error(
-            "Erro ao salvar pedido:",
-            data
-        );
-
-        alert(
-            "Não foi possível registrar o pedido. Tente novamente."
-        );
-
-        return;
-
-    }
-
-
-    // ============================
-    // SALVAR LOCALMENTE
-    // ============================
-
-    localStorage.setItem(
-        "lastOrder",
-        JSON.stringify(order)
-    );
-
-
-    // ============================
-    // LIMPAR CARRINHO
-    // ============================
-
-    localStorage.removeItem(
-        "cart"
-    );
-
-
-    // ============================
-    // IR PARA CONFIRMAÇÃO
-    // ============================
-
-    window.location.href =
-        "pedido.html";
-
-
-}
-catch (error) {
-
-    console.error(
-        "Erro ao enviar pedido:",
-        error
-    );
-
-
-    alert(
-        "Erro de conexão. Tente novamente."
+        }
     );
 
 }
 
 
 // ============================
-// INICIALIZAÇÃO
+// INICIAR
 // ============================
 
 renderCheckout();
+
+                        
