@@ -1,39 +1,30 @@
 // ============================
-// PRODUTOS DO CARRINHO
+// ELEMENTOS
 // ============================
 
 const checkoutItems =
-    document.getElementById(
-        "checkoutItems"
-    );
+    document.getElementById("checkoutItems");
 
 const checkoutTotal =
-    document.getElementById(
-        "checkoutTotal"
-    );
+    document.getElementById("checkoutTotal");
+
 const checkoutSubtotal =
-    document.getElementById(
-        "checkoutSubtotal"
-    );
+    document.getElementById("checkoutSubtotal");
 
 const checkoutShipping =
-    document.getElementById(
-        "checkoutShipping"
-    );
+    document.getElementById("checkoutShipping");
+
+const checkoutForm =
+    document.getElementById("checkoutForm");
 
 const shippingOptions =
     document.querySelectorAll(
         'input[name="shipping"]'
     );
 
-const checkoutForm =
-    document.getElementById(
-        "checkoutForm"
-    );
-
 
 // ============================
-// PEGAR CARRINHO
+// CARRINHO
 // ============================
 
 let checkoutCart =
@@ -46,9 +37,7 @@ let checkoutCart =
 // FORMATAR PREÇO
 // ============================
 
-function formatCheckoutPrice(
-    price
-) {
+function formatCheckoutPrice(price) {
 
     return price.toLocaleString(
         "pt-BR",
@@ -62,7 +51,111 @@ function formatCheckoutPrice(
 
 
 // ============================
-// MOSTRAR PEDIDO
+// CALCULAR SUBTOTAL
+// ============================
+
+function calculateSubtotal() {
+
+    return checkoutCart.reduce(
+        (total, item) => {
+
+            return total +
+                (item.price * item.quantity);
+
+        },
+        0
+    );
+
+}
+
+
+// ============================
+// PEGAR FRETE
+// ============================
+
+function getSelectedShipping() {
+
+    const selected =
+        document.querySelector(
+            'input[name="shipping"]:checked'
+        );
+
+
+    if (!selected) {
+
+        return {
+            name: "Nenhum",
+            price: 0
+        };
+
+    }
+
+
+    return {
+
+        name:
+            selected.dataset.name,
+
+        price:
+            Number(selected.value)
+
+    };
+
+}
+
+
+// ============================
+// ATUALIZAR TOTAL
+// ============================
+
+function updateCheckoutTotal() {
+
+    const subtotal =
+        calculateSubtotal();
+
+
+    const shipping =
+        getSelectedShipping();
+
+
+    const total =
+        subtotal + shipping.price;
+
+
+    if (checkoutSubtotal) {
+
+        checkoutSubtotal.textContent =
+            `R$ ${formatCheckoutPrice(
+                subtotal
+            )}`;
+
+    }
+
+
+    if (checkoutShipping) {
+
+        checkoutShipping.textContent =
+            `R$ ${formatCheckoutPrice(
+                shipping.price
+            )}`;
+
+    }
+
+
+    if (checkoutTotal) {
+
+        checkoutTotal.textContent =
+            `R$ ${formatCheckoutPrice(
+                total
+            )}`;
+
+    }
+
+}
+
+
+// ============================
+// RENDERIZAR CHECKOUT
 // ============================
 
 function renderCheckout() {
@@ -75,9 +168,7 @@ function renderCheckout() {
     checkoutItems.innerHTML = "";
 
 
-    if (
-        checkoutCart.length === 0
-    ) {
+    if (checkoutCart.length === 0) {
 
         checkoutItems.innerHTML = `
 
@@ -106,23 +197,28 @@ function renderCheckout() {
 
         }
 
+
+        updateCheckoutTotal();
+
         return;
 
     }
 
 
-    let subtotal = 0;
+    if (checkoutForm) {
+
+        checkoutForm.style.display =
+            "";
+
+    }
 
 
     checkoutCart.forEach(
         item => {
 
-            const itemTotal =
+            const subtotal =
                 item.price *
                 item.quantity;
-
-
-            subtotal += itemTotal;
 
 
             const element =
@@ -163,7 +259,7 @@ function renderCheckout() {
 
                 <strong>
                     R$ ${formatCheckoutPrice(
-                        itemTotal
+                        subtotal
                     )}
                 </strong>
 
@@ -178,14 +274,33 @@ function renderCheckout() {
     );
 
 
-    updateCheckoutTotal(
-        subtotal
-    );
+    updateCheckoutTotal();
 
 }
 
+
 // ============================
-// CEP AUTOMÁTICO
+// TROCAR FRETE
+// ============================
+
+shippingOptions.forEach(
+    option => {
+
+        option.addEventListener(
+            "change",
+            () => {
+
+                updateCheckoutTotal();
+
+            }
+        );
+
+    }
+);
+
+
+// ============================
+// CEP
 // ============================
 
 const cepInput =
@@ -236,7 +351,10 @@ if (cepInput) {
 
 
             const cleanCep =
-                value.replace(/\D/g, "");
+                value.replace(
+                    /\D/g,
+                    ""
+                );
 
 
             if (
@@ -326,7 +444,6 @@ if (cepInput) {
                 }
 
             }
-
             catch (error) {
 
                 console.error(
@@ -380,67 +497,10 @@ if (checkoutForm) {
                 new FormData(
                     checkoutForm
                 );
-const selectedShipping =
-    document.querySelector(
-        'input[name="shipping"]:checked'
-    );
 
 
-const shippingName =
-    selectedShipping
-        ? selectedShipping.dataset.name
-        : "Não informado";
+            const customer = {
 
-
-const shippingPrice =
-    selectedShipping
-        ? Number(
-            selectedShipping.value
-        )
-        : 0;
-
-
-let subtotal = 0;
-
-
-checkoutCart.forEach(
-    item => {
-
-        subtotal +=
-            item.price *
-            item.quantity;
-
-    }
-);
-
-
-const orderTotal =
-    subtotal + shippingPrice;
-
-            const customer = { 
-const order = {
-
-    customer,
-
-    products:
-        checkoutCart,
-
-    shipping: {
-
-        name:
-            shippingName,
-
-        price:
-            shippingPrice
-
-    },
-
-    subtotal,
-
-    total:
-        orderTotal
-
-};
                 name:
                     formData.get("name"),
 
@@ -465,21 +525,46 @@ const order = {
                 complement:
                     formData.get("complement"),
 
+                neighborhood:
+                    formData.get(
+                        "neighborhood"
+                    ),
+
                 city:
                     formData.get("city")
 
             };
 
 
-            console.log(
-                "Cliente:",
-                customer
-            );
+            const shipping =
+                getSelectedShipping();
+
+
+            const subtotal =
+                calculateSubtotal();
+
+
+            const order = {
+
+                customer,
+
+                products:
+                    checkoutCart,
+
+                shipping,
+
+                subtotal,
+
+                total:
+                    subtotal +
+                    shipping.price
+
+            };
 
 
             console.log(
                 "Pedido:",
-                Order
+                order
             );
 
 
@@ -498,86 +583,3 @@ const order = {
 // ============================
 
 renderCheckout();
-function updateCheckoutTotal(
-    subtotal
-) {
-
-    const selectedShipping =
-        document.querySelector(
-            'input[name="shipping"]:checked'
-        );
-
-
-    const shipping =
-        selectedShipping
-            ? Number(
-                selectedShipping.value
-            )
-            : 0;
-
-
-    const total =
-        subtotal + shipping;
-
-
-    if (checkoutSubtotal) {
-
-        checkoutSubtotal.textContent =
-            `R$ ${formatCheckoutPrice(
-                subtotal
-            )}`;
-
-    }
-
-
-    if (checkoutShipping) {
-
-        checkoutShipping.textContent =
-            `R$ ${formatCheckoutPrice(
-                shipping
-            )}`;
-
-    }
-
-
-    if (checkoutTotal) {
-
-        checkoutTotal.textContent =
-            `R$ ${formatCheckoutPrice(
-                total
-            )}`;
-
-    }
-
-}
-
-shippingOptions.forEach(
-    option => {
-
-        option.addEventListener(
-            "change",
-            () => {
-
-                let subtotal = 0;
-
-
-                checkoutCart.forEach(
-                    item => {
-
-                        subtotal +=
-                            item.price *
-                            item.quantity;
-
-                    }
-                );
-
-
-                updateCheckoutTotal(
-                    subtotal
-                );
-
-            }
-        );
-
-    }
-);
