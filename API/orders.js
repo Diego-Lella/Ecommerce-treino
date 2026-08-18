@@ -19,8 +19,7 @@ export default async function handler(req, res) {
         // DADOS DO PEDIDO
         // ============================
 
-        const order =
-            req.body;
+        const order = req.body;
 
 
         if (!order) {
@@ -38,7 +37,7 @@ export default async function handler(req, res) {
 
         if (
             !order.customer ||
-            !order.products ||
+            !Array.isArray(order.products) ||
             !order.shipping ||
             order.subtotal === undefined ||
             order.total === undefined
@@ -58,7 +57,6 @@ export default async function handler(req, res) {
         const supabaseUrl =
             process.env.SUPABASE_URL;
 
-
         const supabaseKey =
             process.env.SUPABASE_ANON_KEY;
 
@@ -77,6 +75,14 @@ export default async function handler(req, res) {
 
 
         // ============================
+        // NÚMERO DO PEDIDO
+        // ============================
+
+        const orderNumber =
+            `PED-${Date.now()}`;
+
+
+        // ============================
         // ENVIAR PARA O SUPABASE
         // ============================
 
@@ -84,6 +90,7 @@ export default async function handler(req, res) {
             await fetch(
                 `${supabaseUrl}/rest/v1/orders`,
                 {
+
                     method: "POST",
 
                     headers: {
@@ -106,7 +113,7 @@ export default async function handler(req, res) {
                         JSON.stringify({
 
                             order_number:
-                                order.orderNumber,
+                                orderNumber,
 
                             customer:
                                 order.customer,
@@ -118,10 +125,14 @@ export default async function handler(req, res) {
                                 order.shipping,
 
                             subtotal:
-                                order.subtotal,
+                                Number(
+                                    order.subtotal
+                                ),
 
                             total:
-                                order.total,
+                                Number(
+                                    order.total
+                                ),
 
                             status:
                                 "pending"
@@ -164,19 +175,30 @@ export default async function handler(req, res) {
 
 
         // ============================
-        // SUCESSO
+        // PEDIDO SALVO
         // ============================
 
         const data =
             await response.json();
 
 
+        const savedOrder =
+            data[0];
+
+
+        // ============================
+        // RESPOSTA PARA O CHECKOUT
+        // ============================
+
         return res.status(201).json({
 
             success: true,
 
+            orderId:
+                savedOrder?.id || orderNumber,
+
             order:
-                data[0]
+                savedOrder
 
         });
 
@@ -193,10 +215,13 @@ export default async function handler(req, res) {
         return res.status(500).json({
 
             error:
-                "Erro interno do servidor"
+                "Erro interno do servidor",
+
+            details:
+                error.message
 
         });
 
     }
 
-                          }
+}
