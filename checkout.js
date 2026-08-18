@@ -562,16 +562,22 @@ if (checkoutForm) {
 
             try {
 
+                // ============================
+                // API
+                // ============================
+
                 const response =
                     await fetch(
-                        "/api/orders",
+                        "/api/Orders",
                         {
 
                             method: "POST",
 
                             headers: {
+
                                 "Content-Type":
                                     "application/json"
+
                             },
 
                             body:
@@ -583,24 +589,38 @@ if (checkoutForm) {
                     );
 
 
-                if (!response.ok) {
-
-                    throw new Error(
-                        "Erro ao criar pedido"
-                    );
-
-                }
-
+                // ============================
+                // LER RESPOSTA
+                // ============================
 
                 const result =
                     await response.json();
 
 
                 console.log(
-                    "Pedido criado:",
+                    "Resposta da API:",
                     result
                 );
 
+
+                // ============================
+                // ERRO
+                // ============================
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        result.error ||
+                        result.details ||
+                        "Erro ao criar pedido"
+                    );
+
+                }
+
+
+                // ============================
+                // SUCESSO
+                // ============================
 
                 if (
                     result.orderId
@@ -623,7 +643,6 @@ if (checkoutForm) {
                     "Pedido realizado com sucesso!"
                 );
 
-
             } catch (error) {
 
                 console.error(
@@ -633,7 +652,8 @@ if (checkoutForm) {
 
 
                 alert(
-                    "Não foi possível finalizar o pedido. Tente novamente."
+                    "Não foi possível finalizar o pedido:\n\n" +
+                    error.message
                 );
 
             }
@@ -649,5 +669,3 @@ if (checkoutForm) {
 // ============================
 
 renderCheckout();
-
-                        
