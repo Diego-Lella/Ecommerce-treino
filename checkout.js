@@ -176,17 +176,38 @@ function renderCheckout() {
 
 // ============================
 // CEP
+// ==========================
+
+// ============================
+// CEP AUTOMÁTICO
 // ============================
 
 const cepInput =
     document.getElementById("cep");
+
+const cepStatus =
+    document.getElementById("cepStatus");
+
+const streetInput =
+    document.getElementById("street");
+
+const neighborhoodInput =
+    document.getElementById(
+        "neighborhood"
+    );
+
+const cityInput =
+    document.getElementById("city");
+
+const stateInput =
+    document.getElementById("state");
 
 
 if (cepInput) {
 
     cepInput.addEventListener(
         "input",
-        event => {
+        async event => {
 
             let value =
                 event.target.value
@@ -206,6 +227,116 @@ if (cepInput) {
 
             event.target.value =
                 value;
+
+
+            const cleanCep =
+                value.replace(/\D/g, "");
+
+
+            if (
+                cleanCep.length !== 8
+            ) {
+
+                if (cepStatus) {
+
+                    cepStatus.textContent =
+                        "";
+
+                }
+
+                return;
+
+            }
+
+
+            if (cepStatus) {
+
+                cepStatus.textContent =
+                    "Buscando...";
+
+            }
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        `https://brasilapi.com.br/api/cep/v2/${cleanCep}`
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "CEP não encontrado"
+                    );
+
+                }
+
+
+                const data =
+                    await response.json();
+
+
+                if (streetInput) {
+
+                    streetInput.value =
+                        data.street || "";
+
+                }
+
+
+                if (
+                    neighborhoodInput
+                ) {
+
+                    neighborhoodInput.value =
+                        data.neighborhood || "";
+
+                }
+
+
+                if (cityInput) {
+
+                    cityInput.value =
+                        data.city || "";
+
+                }
+
+
+                if (stateInput) {
+
+                    stateInput.value =
+                        data.state || "";
+
+                }
+
+
+                if (cepStatus) {
+
+                    cepStatus.textContent =
+                        "✓ Endereço encontrado";
+
+                }
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Erro ao consultar CEP:",
+                    error
+                );
+
+
+                if (cepStatus) {
+
+                    cepStatus.textContent =
+                        "CEP não encontrado";
+
+                }
+
+            }
 
         }
     );
