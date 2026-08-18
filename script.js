@@ -96,7 +96,10 @@ function renderProducts() {
                 src="${product.image}"
                 alt="${product.name}"
             >
-
+            <div
+            onclick="openProduct(${product.id})"
+            style="cursor: pointer;"
+             >
             <div class="product-info">
 
                 <h3 class="product-name">
@@ -358,3 +361,10 @@ checkoutButton.addEventListener(
 renderProducts();
 
 renderCart();
+
+function openProduct(productId) {
+
+    window.location.href =
+        `produto.html?id=${productId}`;
+
+}
