@@ -11,6 +11,20 @@ const checkoutTotal =
     document.getElementById(
         "checkoutTotal"
     );
+const checkoutSubtotal =
+    document.getElementById(
+        "checkoutSubtotal"
+    );
+
+const checkoutShipping =
+    document.getElementById(
+        "checkoutShipping"
+    );
+
+const shippingOptions =
+    document.querySelectorAll(
+        'input[name="shipping"]'
+    );
 
 const checkoutForm =
     document.getElementById(
