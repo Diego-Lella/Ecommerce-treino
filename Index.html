@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Minha Loja</title>
+
+    <meta
+        name="description"
+        content="Minha loja online"
+    >
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header class="header">
+
+        <div class="container header-content">
+
+            <a href="#" class="logo">
+                Minha Loja
+            </a>
+
+            <nav class="nav">
+
+                <a href="#produtos">
+                    Produtos
+                </a>
+
+                <a href="#sobre">
+                    Sobre
+                </a>
+
+                <a href="#contato">
+                    Contato
+                </a>
+
+                <button class="cart-button" id="cartButton">
+                    🛒 Carrinho
+                    <span id="cartCount">0</span>
+                </button>
+
+            </nav>
+
+        </div>
+
+    </header>
+
+
+    <main>
+
+        <section class="hero">
+
+            <div class="container hero-content">
+
+                <div class="hero-text">
+
+                    <span class="hero-tag">
+                        OFERTAS ESPECIAIS
+                    </span>
+
+                    <h1>
+                        Produtos que você vai amar.
+                    </h1>
+
+                    <p>
+                        Encontre produtos selecionados,
+                        preços especiais e uma experiência
+                        de compra simples e segura.
+                    </p>
+
+                    <a href="#produtos" class="button">
+                        Ver produtos
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section id="produtos" class="products-section">
+
+            <div class="container">
+
+                <div class="section-title">
+
+                    <span>
+                        NOSSA LOJA
+                    </span>
+
+                    <h2>
+                        Produtos em destaque
+                    </h2>
+
+                </div>
+
+                <div
+                    id="productsGrid"
+                    class="products-grid"
+                ></div>
+
+            </div>
+
+        </section>
+
+
+        <section id="sobre" class="about">
+
+            <div class="container">
+
+                <h2>
+                    Sobre nossa loja
+                </h2>
+
+                <p>
+                    Produtos selecionados com cuidado
+                    para oferecer qualidade e praticidade.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <section id="contato" class="contact">
+
+            <div class="container">
+
+                <h2>
+                    Precisa de ajuda?
+                </h2>
+
+                <p>
+                    Entre em contato conosco.
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <div
+        id="cartModal"
+        class="cart-modal"
+    >
+
+        <div class="cart-content">
+
+            <div class="cart-header">
+
+                <h2>
+                    Seu carrinho
+                </h2>
+
+                <button
+                    id="closeCart"
+                    class="close-button"
+                >
+                    ×
+                </button>
+
+            </div>
+
+            <div id="cartItems"></div>
+
+            <div class="cart-footer">
+
+                <strong>
+                    Total:
+                    R$
+                    <span id="cartTotal">
+                        0,00
+                    </span>
+                </strong>
+
+                <button
+                    id="checkoutButton"
+                    class="button"
+                >
+                    Finalizar pedido
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script src="script.js"></script>
+
+</body>
+</html>
