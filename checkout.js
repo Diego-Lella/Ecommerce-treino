@@ -479,7 +479,7 @@ const order = {
 
             console.log(
                 "Pedido:",
-                checkoutCart
+                Order
             );
 
 
