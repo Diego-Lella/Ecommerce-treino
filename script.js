@@ -526,18 +526,44 @@ function renderCart() {
     cartItems.innerHTML = "";
 
     let total = 0;
-
     let quantity = 0;
+
+
+    if (cart.length === 0) {
+
+        cartItems.innerHTML = `
+
+            <div class="empty-cart">
+
+                <div class="empty-cart-icon">
+                    🛒
+                </div>
+
+                <h3>
+                    Seu carrinho está vazio
+                </h3>
+
+                <p>
+                    Adicione alguns produtos
+                    para continuar.
+                </p>
+
+            </div>
+
+        `;
+
+    }
 
 
     cart.forEach(item => {
 
-        total +=
-            item.price *
-            item.quantity;
+        const subtotal =
+            item.price * item.quantity;
 
-        quantity +=
-            item.quantity;
+
+        total += subtotal;
+
+        quantity += item.quantity;
 
 
         const element =
@@ -549,24 +575,71 @@ function renderCart() {
 
         element.innerHTML = `
 
-            <div>
+            <div class="cart-product">
 
-                <strong>
-                    ${item.name}
-                </strong>
+                <img
+                    src="${item.image}"
+                    alt="${item.name}"
+                    class="cart-product-image"
+                >
 
-                <div>
-                    ${item.quantity}x
-                    R$ ${formatPrice(item.price)}
+                <div class="cart-product-info">
+
+                    <strong>
+                        ${item.name}
+                    </strong>
+
+                    <span>
+                        R$ ${formatPrice(item.price)}
+                    </span>
+
                 </div>
 
             </div>
 
-            <button
-                onclick="removeFromCart(${item.id})"
-            >
-                Remover
-            </button>
+
+            <div class="cart-item-actions">
+
+                <div class="cart-quantity">
+
+                    <button
+                        onclick="changeCartQuantity(
+                            ${item.id},
+                            -1
+                        )"
+                    >
+                        −
+                    </button>
+
+                    <span>
+                        ${item.quantity}
+                    </span>
+
+                    <button
+                        onclick="changeCartQuantity(
+                            ${item.id},
+                            1
+                        )"
+                    >
+                        +
+                    </button>
+
+                </div>
+
+
+                <strong class="cart-subtotal">
+                    R$ ${formatPrice(subtotal)}
+                </strong>
+
+
+                <button
+                    class="remove-cart-item"
+                    onclick="removeFromCart(${item.id})"
+                >
+                    🗑️
+                </button>
+
+            </div>
 
         `;
 
