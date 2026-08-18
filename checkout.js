@@ -593,9 +593,28 @@ if (checkoutForm) {
                 // LER RESPOSTA
                 // ============================
 
-                const result =
-                    await response.json();
+                const responseText =
+    await response.text();
 
+console.log(
+    "Resposta da API:",
+    responseText
+);
+
+let result;
+
+try {
+
+    result =
+        JSON.parse(responseText);
+
+} catch (error) {
+
+    throw new Error(
+        `API retornou uma resposta inválida: ${responseText}`
+    );
+
+}
 
                 console.log(
                     "Resposta da API:",
