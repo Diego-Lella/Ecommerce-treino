@@ -963,4 +963,39 @@ renderProducts();
 renderProductPage();
 
 renderCart();
-    
+function changeCartQuantity(
+    productId,
+    change
+) {
+
+    const item =
+        cart.find(
+            product =>
+                product.id === productId
+        );
+
+
+    if (!item) {
+        return;
+    }
+
+
+    item.quantity += change;
+
+
+    if (item.quantity <= 0) {
+
+        cart =
+            cart.filter(
+                product =>
+                    product.id !== productId
+            );
+
+    }
+
+
+    saveCart();
+
+    renderCart();
+
+}    
