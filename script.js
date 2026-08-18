@@ -110,7 +110,9 @@ function formatPrice(price) {
 // PRODUTOS DA HOME
 // ============================
 
-function renderProducts() {
+function renderProducts(
+    filteredProducts = products
+) {
 
     if (!productsGrid) {
         return;
@@ -118,13 +120,37 @@ function renderProducts() {
 
     productsGrid.innerHTML = "";
 
-    products.forEach(product => {
+
+    if (filteredProducts.length === 0) {
+
+        productsGrid.innerHTML = `
+
+            <div class="no-products">
+
+                <h3>
+                    Nenhum produto encontrado.
+                </h3>
+
+                <p>
+                    Tente procurar outro produto.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    filteredProducts.forEach(product => {
 
         const card =
             document.createElement("article");
 
         card.className =
             "product-card";
+
 
         card.innerHTML = `
 
@@ -137,6 +163,10 @@ function renderProducts() {
             >
 
             <div class="product-info">
+
+                <span class="product-category">
+                    ${product.category}
+                </span>
 
                 <h3
                     class="product-name"
@@ -164,6 +194,7 @@ function renderProducts() {
             </div>
 
         `;
+
 
         productsGrid.appendChild(card);
 
