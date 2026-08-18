@@ -185,10 +185,6 @@ function renderCheckout() {
 }
 
 // ============================
-// CEP
-// ==========================
-
-// ============================
 // CEP AUTOMÁTICO
 // ============================
 
@@ -384,7 +380,42 @@ if (checkoutForm) {
                 new FormData(
                     checkoutForm
                 );
+const selectedShipping =
+    document.querySelector(
+        'input[name="shipping"]:checked'
+    );
 
+
+const shippingName =
+    selectedShipping
+        ? selectedShipping.dataset.name
+        : "Não informado";
+
+
+const shippingPrice =
+    selectedShipping
+        ? Number(
+            selectedShipping.value
+        )
+        : 0;
+
+
+let subtotal = 0;
+
+
+checkoutCart.forEach(
+    item => {
+
+        subtotal +=
+            item.price *
+            item.quantity;
+
+    }
+);
+
+
+const orderTotal =
+    subtotal + shippingPrice;
 
             const customer = {
 
@@ -445,3 +476,86 @@ if (checkoutForm) {
 // ============================
 
 renderCheckout();
+function updateCheckoutTotal(
+    subtotal
+) {
+
+    const selectedShipping =
+        document.querySelector(
+            'input[name="shipping"]:checked'
+        );
+
+
+    const shipping =
+        selectedShipping
+            ? Number(
+                selectedShipping.value
+            )
+            : 0;
+
+
+    const total =
+        subtotal + shipping;
+
+
+    if (checkoutSubtotal) {
+
+        checkoutSubtotal.textContent =
+            `R$ ${formatCheckoutPrice(
+                subtotal
+            )}`;
+
+    }
+
+
+    if (checkoutShipping) {
+
+        checkoutShipping.textContent =
+            `R$ ${formatCheckoutPrice(
+                shipping
+            )}`;
+
+    }
+
+
+    if (checkoutTotal) {
+
+        checkoutTotal.textContent =
+            `R$ ${formatCheckoutPrice(
+                total
+            )}`;
+
+    }
+
+}
+
+shippingOptions.forEach(
+    option => {
+
+        option.addEventListener(
+            "change",
+            () => {
+
+                let subtotal = 0;
+
+
+                checkoutCart.forEach(
+                    item => {
+
+                        subtotal +=
+                            item.price *
+                            item.quantity;
+
+                    }
+                );
+
+
+                updateCheckoutTotal(
+                    subtotal
+                );
+
+            }
+        );
+
+    }
+);
