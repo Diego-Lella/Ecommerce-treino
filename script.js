@@ -731,7 +731,160 @@ if (checkoutButton) {
 // ============================
 // INICIALIZAÇÃO
 // ============================
+let currentCategory = "todos";
 
+
+function filterProducts() {
+
+    let filtered =
+        [...products];
+
+
+    // Categoria
+
+    if (
+        currentCategory !== "todos"
+    ) {
+
+        filtered =
+            filtered.filter(
+                product =>
+                    product.category ===
+                    currentCategory
+            );
+
+    }
+
+
+    // Pesquisa
+
+    const search =
+        searchInput
+            ? searchInput.value
+                .toLowerCase()
+                .trim()
+            : "";
+
+
+    if (search) {
+
+        filtered =
+            filtered.filter(
+                product =>
+                    product.name
+                        .toLowerCase()
+                        .includes(search)
+                    ||
+                    product.description
+                        .toLowerCase()
+                        .includes(search)
+            );
+
+    }
+
+
+    // Ordenação
+
+    const sort =
+        sortSelect
+            ? sortSelect.value
+            : "default";
+
+
+    if (sort === "price-low") {
+
+        filtered.sort(
+            (a, b) =>
+                a.price - b.price
+        );
+
+    }
+
+
+    if (sort === "price-high") {
+
+        filtered.sort(
+            (a, b) =>
+                b.price - a.price
+        );
+
+    }
+
+
+    if (sort === "name") {
+
+        filtered.sort(
+            (a, b) =>
+                a.name.localeCompare(
+                    b.name
+                )
+        );
+
+    }
+
+
+    renderProducts(filtered);
+
+}
+
+
+// Pesquisa
+
+if (searchInput) {
+
+    searchInput.addEventListener(
+        "input",
+        filterProducts
+    );
+
+}
+
+
+// Ordenação
+
+if (sortSelect) {
+
+    sortSelect.addEventListener(
+        "change",
+        filterProducts
+    );
+
+}
+
+
+// Categorias
+
+categoryButtons.forEach(
+    button => {
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                categoryButtons.forEach(
+                    item =>
+                        item.classList.remove(
+                            "active"
+                        )
+                );
+
+
+                button.classList.add(
+                    "active"
+                );
+
+
+                currentCategory =
+                    button.dataset.category;
+
+
+                filterProducts();
+
+            }
+        );
+
+    }
+);
 renderProducts();
 
 renderProductPage();
