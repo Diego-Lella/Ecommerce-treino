@@ -457,32 +457,122 @@
                     </div>
 
 
-                    <div class="checkout-total">
+                    <div class="checkout-shipping">
 
-                        <span>
-                            Total
-                        </span>
-
-                        <strong id="checkoutTotal">
-                            R$ 0,00
-                        </strong>
-
-                    </div>
-
-                </aside>
+    <h3>
+        Entrega
+    </h3>
 
 
-            </div>
+    <label class="shipping-option">
+
+        <input
+            type="radio"
+            name="shipping"
+            value="0"
+            data-name="Retirada"
+        >
+
+        <div>
+
+            <strong>
+                Retirada
+            </strong>
+
+            <span>
+                Grátis
+            </span>
 
         </div>
 
-    </main>
+    </label>
 
 
-    <script src="script.js"></script>
+    <label class="shipping-option">
 
-    <script src="checkout.js"></script>
+        <input
+            type="radio"
+            name="shipping"
+            value="15"
+            data-name="Entrega econômica"
+            checked
+        >
 
-</body>
+        <div>
 
-                                          </html>
+            <strong>
+                Entrega econômica
+            </strong>
+
+            <span>
+                R$ 15,00
+            </span>
+
+        </div>
+
+    </label>
+
+
+    <label class="shipping-option">
+
+        <input
+            type="radio"
+            name="shipping"
+            value="29.90"
+            data-name="Entrega expressa"
+        >
+
+        <div>
+
+            <strong>
+                Entrega expressa
+            </strong>
+
+            <span>
+                R$ 29,90
+            </span>
+
+        </div>
+
+    </label>
+
+</div>
+
+
+<div class="checkout-price-row">
+
+    <span>
+        Subtotal
+    </span>
+
+    <strong id="checkoutSubtotal">
+        R$ 0,00
+    </strong>
+
+</div>
+
+
+<div class="checkout-price-row">
+
+    <span>
+        Frete
+    </span>
+
+    <strong id="checkoutShipping">
+        R$ 15,00
+    </strong>
+
+</div>
+
+
+<div class="checkout-total">
+
+    <span>
+        Total
+    </span>
+
+    <strong id="checkoutTotal">
+        R$ 0,00
+    </strong>
+
+</div>
