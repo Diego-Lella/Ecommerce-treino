@@ -1,513 +1,774 @@
+// ============================
+// ELEMENTOS
+// ============================
 
-                <!DOCTYPE html>
-<html lang="pt-BR">
+const checkoutItems =
+    document.getElementById("checkoutItems");
 
-<head>
+const checkoutSubtotal =
+    document.getElementById("checkoutSubtotal");
 
-    <meta charset="UTF-8">
+const checkoutShipping =
+    document.getElementById("checkoutShipping");
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+const checkoutTotal =
+    document.getElementById("checkoutTotal");
 
-    <meta
-        name="description"
-        content="Finalize seu pedido com segurança."
-    >
+const checkoutForm =
+    document.getElementById("checkoutForm");
 
-    <title>
-        Finalizar pedido
-    </title>
+const checkoutSubmit =
+    document.getElementById("checkoutSubmit");
 
-    <link
-        rel="stylesheet"
-        href="style.css"
-    >
+const shippingOptions =
+    document.querySelectorAll(
+        'input[name="shipping"]'
+    );
 
-</head>
 
+// ============================
+// CARRINHO
+// ============================
 
-<body>
+function getCart() {
 
+    try {
 
-<header class="site-header">
+        const saved =
+            localStorage.getItem("cart");
 
-    <div class="container header-content">
+        const cart =
+            saved
+                ? JSON.parse(saved)
+                : [];
 
-        <a
-            href="index.html"
-            class="logo"
-        >
-            MINHA LOJA
-        </a>
+        return Array.isArray(cart)
+            ? cart
+            : [];
 
+    }
+    catch (error) {
 
-        <a
-            href="index.html"
-            class="back-link"
-        >
-            ← Continuar comprando
-        </a>
+        console.error(
+            "Erro ao ler carrinho:",
+            error
+        );
 
-    </div>
+        return [];
 
-</header>
+    }
 
+}
 
 
-<main class="checkout-page">
+let checkoutCart =
+    getCart();
 
-    <div class="container">
 
+// ============================
+// PREÇO
+// ============================
 
-        <div class="checkout-header">
+function formatPrice(value) {
 
-            <span>
-                FINALIZAÇÃO
-            </span>
+    const number =
+        Number(value) || 0;
 
-            <h1>
-                Finalize seu pedido
-            </h1>
+    return number.toLocaleString(
+        "pt-BR",
+        {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }
+    );
 
-            <p>
-                Preencha seus dados para continuar.
-            </p>
+}
 
-        </div>
 
+// ============================
+// SUBTOTAL
+// ============================
 
+function calculateSubtotal() {
 
-        <div class="checkout-layout">
+    return checkoutCart.reduce(
+        (total, item) => {
 
+            const price =
+                Number(item.price) || 0;
 
-            <!-- FORMULÁRIO -->
+            const quantity =
+                Number(item.quantity) || 0;
 
-            <section class="checkout-form">
+            return total +
+                (price * quantity);
 
-                <form id="checkoutForm">
+        },
+        0
+    );
 
+}
 
-                    <!-- DADOS DO CLIENTE -->
 
-                    <div class="checkout-section">
+// ============================
+// FRETE
+// ============================
 
-                        <h2>
-                            Seus dados
-                        </h2>
+function getSelectedShipping() {
 
+    const selected =
+        document.querySelector(
+            'input[name="shipping"]:checked'
+        );
 
-                        <div class="form-group">
 
-                            <label for="name">
-                                Nome completo
-                            </label>
+    if (!selected) {
 
-                            <input
-                                type="text"
-                                id="name"
-                                name="name"
-                                placeholder="Seu nome completo"
-                                autocomplete="name"
-                                required
-                            >
+        return {
+            name: "Entrega econômica",
+            price: 15
+        };
 
-                        </div>
+    }
 
 
-                        <div class="form-row">
+    return {
 
-                            <div class="form-group">
+        name:
+            selected.dataset.name ||
+            "Entrega",
 
-                                <label for="email">
-                                    E-mail
-                                </label>
+        price:
+            Number(selected.value) || 0
 
-                                <input
-                                    type="email"
-                                    id="email"
-                                    name="email"
-                                    placeholder="seu@email.com"
-                                    autocomplete="email"
-                                    required
-                                >
+    };
 
-                            </div>
+}
 
 
-                            <div class="form-group">
+// ============================
+// ATUALIZAR TOTAL
+// ============================
 
-                                <label for="phone">
-                                    WhatsApp
-                                </label>
+function updateTotals() {
 
-                                <input
-                                    type="tel"
-                                    id="phone"
-                                    name="phone"
-                                    placeholder="(51) 99999-9999"
-                                    autocomplete="tel"
-                                    required
-                                >
+    const subtotal =
+        calculateSubtotal();
 
-                            </div>
+    const shipping =
+        getSelectedShipping();
 
-                        </div>
+    const total =
+        subtotal +
+        shipping.price;
 
-                    </div>
 
+    if (checkoutSubtotal) {
 
+        checkoutSubtotal.textContent =
+            `R$ ${formatPrice(subtotal)}`;
 
-                    <!-- ENDEREÇO -->
+    }
 
-                    <div class="checkout-section">
 
-                        <h2>
-                            Endereço de entrega
-                        </h2>
+    if (checkoutShipping) {
 
+        checkoutShipping.textContent =
+            `R$ ${formatPrice(
+                shipping.price
+            )}`;
 
-                        <div class="form-row">
+    }
 
-                            <div class="form-group">
 
-                                <label for="cep">
-                                    CEP
-                                </label>
+    if (checkoutTotal) {
 
-                                <div class="cep-wrapper">
+        checkoutTotal.textContent =
+            `R$ ${formatPrice(total)}`;
 
-                                    <input
-                                        type="text"
-                                        id="cep"
-                                        name="cep"
-                                        placeholder="00000-000"
-                                        inputmode="numeric"
-                                        autocomplete="postal-code"
-                                        maxlength="9"
-                                        required
-                                    >
+    }
 
-                                    <span
-                                        id="cepStatus"
-                                        class="cep-status"
-                                    ></span>
+}
 
-                                </div>
 
-                            </div>
+// ============================
+// MOSTRAR PRODUTOS
+// ============================
 
+function renderCheckout() {
 
-                            <div class="form-group">
+    if (!checkoutItems) {
 
-                                <label for="state">
-                                    Estado
-                                </label>
+        console.error(
+            "Elemento #checkoutItems não encontrado."
+        );
 
-                                <select
-                                    id="state"
-                                    name="state"
-                                    autocomplete="address-level1"
-                                    required
-                                >
+        return;
 
-                                    <option value="">
-                                        Selecione
-                                    </option>
+    }
 
-                                    <option value="AC">Acre</option>
-                                    <option value="AL">Alagoas</option>
-                                    <option value="AP">Amapá</option>
-                                    <option value="AM">Amazonas</option>
-                                    <option value="BA">Bahia</option>
-                                    <option value="CE">Ceará</option>
-                                    <option value="DF">Distrito Federal</option>
-                                    <option value="ES">Espírito Santo</option>
-                                    <option value="GO">Goiás</option>
-                                    <option value="MA">Maranhão</option>
-                                    <option value="MT">Mato Grosso</option>
-                                    <option value="MS">Mato Grosso do Sul</option>
-                                    <option value="MG">Minas Gerais</option>
-                                    <option value="PA">Pará</option>
-                                    <option value="PB">Paraíba</option>
-                                    <option value="PR">Paraná</option>
-                                    <option value="PE">Pernambuco</option>
-                                    <option value="PI">Piauí</option>
-                                    <option value="RJ">Rio de Janeiro</option>
-                                    <option value="RN">Rio Grande do Norte</option>
-                                    <option value="RS">Rio Grande do Sul</option>
-                                    <option value="RO">Rondônia</option>
-                                    <option value="RR">Roraima</option>
-                                    <option value="SC">Santa Catarina</option>
-                                    <option value="SP">São Paulo</option>
-                                    <option value="SE">Sergipe</option>
-                                    <option value="TO">Tocantins</option>
 
-                                </select>
+    checkoutItems.innerHTML = "";
 
-                            </div>
 
-                        </div>
+    if (
+        checkoutCart.length === 0
+    ) {
 
+        checkoutItems.innerHTML = `
 
-                        <div class="form-group">
+            <div class="checkout-empty">
 
-                            <label for="street">
-                                Rua
-                            </label>
+                <p>
+                    Seu carrinho está vazio.
+                </p>
 
-                            <input
-                                type="text"
-                                id="street"
-                                name="street"
-                                placeholder="Nome da rua"
-                                autocomplete="street-address"
-                                required
-                            >
+                <a
+                    href="index.html"
+                    class="back-link"
+                >
+                    Voltar para a loja
+                </a>
 
-                        </div>
+            </div>
 
+        `;
 
-                        <div class="form-group">
 
-                            <label for="neighborhood">
-                                Bairro
-                            </label>
+        if (checkoutForm) {
 
-                            <input
-                                type="text"
-                                id="neighborhood"
-                                name="neighborhood"
-                                placeholder="Seu bairro"
-                                autocomplete="address-line2"
-                                required
-                            >
+            checkoutForm.style.display =
+                "none";
 
-                        </div>
+        }
 
 
-                        <div class="form-row">
+        updateTotals();
 
-                            <div class="form-group">
+        return;
 
-                                <label for="number">
-                                    Número
-                                </label>
+    }
 
-                                <input
-                                    type="text"
-                                    id="number"
-                                    name="number"
-                                    placeholder="123"
-                                    required
-                                >
 
-                            </div>
+    if (checkoutForm) {
 
+        checkoutForm.style.display =
+            "";
 
-                            <div class="form-group">
+    }
 
-                                <label for="complement">
-                                    Complemento
-                                </label>
 
-                                <input
-                                    type="text"
-                                    id="complement"
-                                    name="complement"
-                                    placeholder="Apto, casa..."
-                                >
+    checkoutCart.forEach(
+        item => {
 
-                            </div>
+            const price =
+                Number(item.price) || 0;
 
-                        </div>
+            const quantity =
+                Number(item.quantity) || 0;
 
+            const subtotal =
+                price * quantity;
 
-                        <div class="form-group">
 
-                            <label for="city">
-                                Cidade
-                            </label>
+            const element =
+                document.createElement(
+                    "div"
+                );
 
-                            <input
-                                type="text"
-                                id="city"
-                                name="city"
-                                placeholder="Sua cidade"
-                                autocomplete="address-level2"
-                                required
-                            >
 
-                        </div>
+            element.className =
+                "checkout-product";
 
-                    </div>
 
+            element.innerHTML = `
 
+                <img
+                    src="${item.image}"
+                    alt="${item.name}"
+                    width="70"
+                    height="70"
+                    loading="lazy"
+                    decoding="async"
+                >
 
-                    <button
-                        type="submit"
-                        class="button checkout-submit"
-                        id="checkoutSubmit"
-                    >
-                        Finalizar pedido
-                    </button>
+                <div class="checkout-product-info">
 
-
-                </form>
-
-            </section>
-
-
-
-            <!-- RESUMO -->
-
-            <aside class="checkout-summary">
-
-                <h2>
-                    Seu pedido
-                </h2>
-
-
-                <div id="checkoutItems"></div>
-
-
-                <div class="checkout-shipping">
-
-                    <h3>
-                        Entrega
-                    </h3>
-
-
-                    <label class="shipping-option">
-
-                        <input
-                            type="radio"
-                            name="shipping"
-                            value="0"
-                            data-name="Retirada"
-                        >
-
-                        <div>
-
-                            <strong>
-                                Retirada
-                            </strong>
-
-                            <span>
-                                Grátis
-                            </span>
-
-                        </div>
-
-                    </label>
-
-
-                    <label class="shipping-option">
-
-                        <input
-                            type="radio"
-                            name="shipping"
-                            value="15"
-                            data-name="Entrega econômica"
-                            checked
-                        >
-
-                        <div>
-
-                            <strong>
-                                Entrega econômica
-                            </strong>
-
-                            <span>
-                                R$ 15,00
-                            </span>
-
-                        </div>
-
-                    </label>
-
-
-                    <label class="shipping-option">
-
-                        <input
-                            type="radio"
-                            name="shipping"
-                            value="29.90"
-                            data-name="Entrega expressa"
-                        >
-
-                        <div>
-
-                            <strong>
-                                Entrega expressa
-                            </strong>
-
-                            <span>
-                                R$ 29,90
-                            </span>
-
-                        </div>
-
-                    </label>
-
-                </div>
-
-
-
-                <div class="checkout-price-row">
-
-                    <span>
-                        Subtotal
-                    </span>
-
-                    <strong id="checkoutSubtotal">
-                        R$ 0,00
+                    <strong>
+                        ${item.name}
                     </strong>
 
-                </div>
-
-
-                <div class="checkout-price-row">
-
                     <span>
-                        Frete
+                        ${quantity}x
+                        R$ ${formatPrice(price)}
                     </span>
 
-                    <strong id="checkoutShipping">
-                        R$ 15,00
-                    </strong>
-
                 </div>
 
+                <strong>
+                    R$ ${formatPrice(subtotal)}
+                </strong>
 
-                <div class="checkout-total">
-
-                    <span>
-                        Total
-                    </span>
-
-                    <strong id="checkoutTotal">
-                        R$ 0,00
-                    </strong>
-
-                </div>
-
-            </aside>
+            `;
 
 
-        </div>
+            checkoutItems.appendChild(
+                element
+            );
 
-    </div>
-
-</main>
-
-
-<!-- Importante: só o JS do checkout -->
-
-<script src="checkout.js?v=4"></script>
+        }
+    );
 
 
-</body>
+    updateTotals();
 
-</html>
+}
+
+
+// ============================
+// TROCAR FRETE
+// ============================
+
+shippingOptions.forEach(
+    option => {
+
+        option.addEventListener(
+            "change",
+            updateTotals
+        );
+
+    }
+);
+
+
+// ============================
+// CEP
+// ============================
+
+const cepInput =
+    document.getElementById("cep");
+
+const cepStatus =
+    document.getElementById("cepStatus");
+
+const streetInput =
+    document.getElementById("street");
+
+const neighborhoodInput =
+    document.getElementById(
+        "neighborhood"
+    );
+
+const cityInput =
+    document.getElementById("city");
+
+const stateInput =
+    document.getElementById("state");
+
+
+if (cepInput) {
+
+    cepInput.addEventListener(
+        "input",
+        async event => {
+
+            let value =
+                event.target.value
+                    .replace(/\D/g, "")
+                    .slice(0, 8);
+
+
+            if (
+                value.length > 5
+            ) {
+
+                value =
+                    value.slice(0, 5)
+                    + "-"
+                    + value.slice(5);
+
+            }
+
+
+            event.target.value =
+                value;
+
+
+            const cleanCep =
+                value.replace(
+                    /\D/g,
+                    ""
+                );
+
+
+            if (
+                cleanCep.length !== 8
+            ) {
+
+                if (cepStatus) {
+
+                    cepStatus.textContent =
+                        "";
+
+                }
+
+                return;
+
+            }
+
+
+            if (cepStatus) {
+
+                cepStatus.textContent =
+                    "Buscando...";
+
+            }
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        `https://brasilapi.com.br/api/cep/v2/${cleanCep}`
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "CEP não encontrado"
+                    );
+
+                }
+
+
+                const data =
+                    await response.json();
+
+
+                if (streetInput) {
+
+                    streetInput.value =
+                        data.street || "";
+
+                }
+
+
+                if (
+                    neighborhoodInput
+                ) {
+
+                    neighborhoodInput.value =
+                        data.neighborhood ||
+                        "";
+
+                }
+
+
+                if (cityInput) {
+
+                    cityInput.value =
+                        data.city || "";
+
+                }
+
+
+                if (stateInput) {
+
+                    stateInput.value =
+                        data.state || "";
+
+                }
+
+
+                if (cepStatus) {
+
+                    cepStatus.textContent =
+                        "✓ Endereço encontrado";
+
+                }
+
+            }
+            catch (error) {
+
+                console.error(
+                    "Erro ao consultar CEP:",
+                    error
+                );
+
+
+                if (cepStatus) {
+
+                    cepStatus.textContent =
+                        "CEP não encontrado";
+
+                }
+
+            }
+
+        }
+    );
+
+}
+
+
+// ============================
+// FINALIZAR PEDIDO
+// ============================
+
+if (checkoutForm) {
+
+    checkoutForm.addEventListener(
+        "submit",
+        async event => {
+
+            event.preventDefault();
+
+
+            checkoutCart =
+                getCart();
+
+
+            if (
+                checkoutCart.length === 0
+            ) {
+
+                alert(
+                    "Seu carrinho está vazio."
+                );
+
+                return;
+
+            }
+
+
+            const formData =
+                new FormData(
+                    checkoutForm
+                );
+
+
+            const shipping =
+                getSelectedShipping();
+
+            const subtotal =
+                calculateSubtotal();
+
+
+            const order = {
+
+                orderNumber:
+                    createOrderNumber(),
+
+                createdAt:
+                    new Date().toISOString(),
+
+                customer: {
+
+                    name:
+                        formData.get("name"),
+
+                    email:
+                        formData.get("email"),
+
+                    phone:
+                        formData.get("phone"),
+
+                    cep:
+                        formData.get("cep"),
+
+                    street:
+                        formData.get("street"),
+
+                    neighborhood:
+                        formData.get(
+                            "neighborhood"
+                        ),
+
+                    number:
+                        formData.get("number"),
+
+                    complement:
+                        formData.get(
+                            "complement"
+                        ),
+
+                    city:
+                        formData.get("city"),
+
+                    state:
+                        formData.get("state")
+
+                },
+
+                products:
+                    checkoutCart,
+
+                shipping,
+
+                subtotal,
+
+                total:
+                    subtotal +
+                    shipping.price
+
+            };
+
+
+            if (checkoutSubmit) {
+
+                checkoutSubmit.disabled =
+                    true;
+
+                checkoutSubmit.textContent =
+                    "Processando...";
+
+            }
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        "/api/orders",
+                        {
+
+                            method: "POST",
+
+                            headers: {
+
+                                "Content-Type":
+                                    "application/json"
+
+                            },
+
+                            body:
+                                JSON.stringify(
+                                    order
+                                )
+
+                        }
+                    );
+
+
+                const data =
+                    await response.json()
+                        .catch(
+                            () => ({})
+                        );
+
+
+                if (!response.ok) {
+
+                    console.error(
+                        "Erro da API:",
+                        data
+                    );
+
+
+                    throw new Error(
+                        data.error ||
+                        "Erro ao registrar pedido."
+                    );
+
+                }
+
+
+                // Guardar uma cópia local
+                // para a página de confirmação
+
+                localStorage.setItem(
+                    "lastOrder",
+                    JSON.stringify(
+                        order
+                    )
+                );
+
+
+                // Limpar carrinho
+
+                localStorage.removeItem(
+                    "cart"
+                );
+
+
+                // Ir para confirmação
+
+                window.location.href =
+                    "pedido.html";
+
+            }
+            catch (error) {
+
+                console.error(
+                    "Erro no pedido:",
+                    error
+                );
+
+
+                alert(
+                    "Não foi possível registrar o pedido. Tente novamente."
+                );
+
+
+                if (checkoutSubmit) {
+
+                    checkoutSubmit.disabled =
+                        false;
+
+                    checkoutSubmit.textContent =
+                        "Finalizar pedido";
+
+                }
+
+            }
+
+        }
+    );
+
+}
+
+
+// ============================
+// GERAR NÚMERO DO PEDIDO
+// ============================
+
+function createOrderNumber() {
+
+    const now =
+        new Date();
+
+
+    const year =
+        now.getFullYear();
+
+    const month =
+        String(
+            now.getMonth() + 1
+        ).padStart(2, "0");
+
+    const day =
+        String(
+            now.getDate()
+        ).padStart(2, "0");
+
+
+    const random =
+        Math.floor(
+            1000 +
+            Math.random() * 9000
+        );
+
+
+    return `${year}${month}${day}-${random}`;
+
+}
+
+
+// ============================
+// INICIALIZAÇÃO
+// ============================
+
+renderCheckout();                                                            
+
+                    
