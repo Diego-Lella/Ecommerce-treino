@@ -368,3 +368,152 @@ body {
     }
 
   }
+/* ============================
+   PÁGINA DO PRODUTO
+============================ */
+
+.product-page {
+    padding: 80px 0;
+    min-height: 70vh;
+}
+
+.product-detail {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 70px;
+    align-items: center;
+}
+
+.product-detail-image img {
+    width: 100%;
+    max-height: 600px;
+    object-fit: cover;
+    border-radius: 18px;
+}
+
+.product-detail-info {
+    max-width: 520px;
+}
+
+.product-detail-tag {
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    color: #666;
+}
+
+.product-detail-info h1 {
+    margin: 15px 0;
+
+    font-size: clamp(40px, 5vw, 64px);
+    line-height: 1;
+}
+
+.product-detail-description {
+    margin: 25px 0;
+
+    color: #666;
+
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+.product-detail-price {
+    margin-bottom: 30px;
+
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.quantity-area {
+    margin-bottom: 25px;
+}
+
+.quantity-area label {
+    display: block;
+
+    margin-bottom: 10px;
+
+    font-weight: bold;
+}
+
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.quantity-controls button {
+    width: 40px;
+    height: 40px;
+
+    border: 1px solid #ddd;
+    border-radius: 8px;
+
+    background: white;
+
+    font-size: 22px;
+
+    cursor: pointer;
+}
+
+.quantity-controls span {
+    min-width: 30px;
+
+    text-align: center;
+
+    font-weight: bold;
+}
+
+.product-buy-button {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.back-link {
+    color: #555;
+    text-decoration: none;
+}
+
+.product-not-found {
+    text-align: center;
+    padding: 100px 0;
+}
+
+.product-not-found h1 {
+    margin-bottom: 15px;
+}
+
+.product-not-found p {
+    margin-bottom: 25px;
+}
+
+
+/* ============================
+   PRODUTO NO MOBILE
+============================ */
+
+@media (max-width: 800px) {
+
+    .product-page {
+        padding: 40px 0;
+    }
+
+    .product-detail {
+        grid-template-columns: 1fr;
+        gap: 35px;
+    }
+
+    .product-detail-info {
+        max-width: none;
+    }
+
+    .product-detail-info h1 {
+        font-size: 42px;
+    }
+
+    .product-detail-image img {
+        max-height: 450px;
+    }
+
+}
