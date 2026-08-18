@@ -1,36 +1,39 @@
 const products = [
 
     {
-        id: 1,
-        name: "Produto Premium",
-        description: "Produto de alta qualidade.",
-        price: 79.90,
-        image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30"
-    },
+    id: 1,
+    name: "Produto Premium",
+    description: "Produto de alta qualidade.",
+    price: 79.90,
+    category: "premium",
+    image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30"
+},
 
     {
-        id: 2,
-        name: "Produto Essencial",
-        description: "Uma excelente opção para o dia a dia.",
-        price: 49.90,
-        image: "https://images.unsplash.com/photo-1503602642458-232111445657"
-    },
+    id: 2,
+    name: "Produto Essencial",
+    description: "Uma excelente opção para o dia a dia.",
+    price: 49.90,
+    category: "essencial",
+    image: "https://images.unsplash.com/photo-1503602642458-232111445657"
+},
 
     {
-        id: 3,
-        name: "Produto Especial",
-        description: "Qualidade e praticidade em um só produto.",
-        price: 99.90,
-        image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab"
-    },
-
+    id: 3,
+    name: "Produto Especial",
+    description: "Qualidade e praticidade em um só produto.",
+    price: 99.90,
+    category: "especial",
+    image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab"
+},
     {
-        id: 4,
-        name: "Produto Exclusivo",
-        description: "Uma escolha diferenciada.",
-        price: 129.90,
-        image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff"
-    }
+    id: 4,
+    name: "Produto Exclusivo",
+    description: "Uma escolha diferenciada.",
+    price: 129.90,
+    category: "premium",
+    image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff"
+}
 
 ];
 
