@@ -111,18 +111,18 @@ function renderCheckout() {
     }
 
 
-    let total = 0;
+    let subtotal = 0;
 
 
     checkoutCart.forEach(
         item => {
 
-            const subtotal =
+            const itemTotal =
                 item.price *
                 item.quantity;
 
 
-            total += subtotal;
+            subtotal += itemTotal;
 
 
             const element =
@@ -163,7 +163,7 @@ function renderCheckout() {
 
                 <strong>
                     R$ ${formatCheckoutPrice(
-                        subtotal
+                        itemTotal
                     )}
                 </strong>
 
@@ -178,15 +178,11 @@ function renderCheckout() {
     );
 
 
-    if (checkoutTotal) {
-
-        checkoutTotal.textContent =
-            `R$ ${formatCheckoutPrice(total)}`;
-
-    }
+    updateCheckoutTotal(
+        subtotal
+    );
 
 }
-
 
 // ============================
 // CEP
