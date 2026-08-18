@@ -15,7 +15,9 @@
         content="Finalize seu pedido com segurança."
     >
 
-    <title>Finalizar Pedido</title>
+    <title>
+        Finalizar pedido
+    </title>
 
     <link
         rel="stylesheet"
@@ -39,6 +41,7 @@
             MINHA LOJA
         </a>
 
+
         <a
             href="index.html"
             class="back-link"
@@ -56,6 +59,8 @@
 
     <div class="container">
 
+
+        <!-- CABEÇALHO -->
 
         <div class="checkout-header">
 
@@ -78,14 +83,14 @@
         <div class="checkout-layout">
 
 
-            <!-- =========================
-                 FORMULÁRIO
-            ========================== -->
+            <!-- FORMULÁRIO -->
 
             <section class="checkout-form">
 
                 <form id="checkoutForm">
 
+
+                    <!-- DADOS DO CLIENTE -->
 
                     <div class="checkout-section">
 
@@ -129,6 +134,101 @@
                                     required
                                 >
 
-                                             
+                            </div>
 
-                                        
+
+                            <div class="form-group">
+
+                                <label for="phone">
+                                    WhatsApp
+                                </label>
+
+                                <input
+                                    type="tel"
+                                    id="phone"
+                                    name="phone"
+                                    placeholder="(51) 99999-9999"
+                                    autocomplete="tel"
+                                    required
+                                >
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- ENDEREÇO -->
+
+                    <div class="checkout-section">
+
+                        <h2>
+                            Endereço de entrega
+                        </h2>
+
+
+                        <!-- CEP + ESTADO -->
+
+                        <div class="form-row">
+
+                            <div class="form-group">
+
+                                <label for="cep">
+                                    CEP
+                                </label>
+
+
+                                <div class="cep-wrapper">
+
+                                    <input
+                                        type="text"
+                                        id="cep"
+                                        name="cep"
+                                        placeholder="00000-000"
+                                        inputmode="numeric"
+                                        autocomplete="postal-code"
+                                        maxlength="9"
+                                        required
+                                    >
+
+
+                                    <span
+                                        id="cepStatus"
+                                        class="cep-status"
+                                    ></span>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="state">
+                                    Estado
+                                </label>
+
+
+                                <select
+                                    id="state"
+                                    name="state"
+                                    autocomplete="address-level1"
+                                    required
+                                >
+
+                                    <option value="">
+                                        Selecione
+                                    </option>
+
+                                    <option value="AC">Acre</option>
+                                    <option value="AL">Alagoas</option>
+                                    <option value="AP">Amapá</option>
+                                    <option value="AM">Amazonas</option>
+                                    <option value="BA">Bahia</option>
+                                    <option value="CE">Ceará</option>
+                                    <option value="DF">Distrito Federal</option>
+                                    <option value="ES">Espírito Santo</option>
+                                    <option value="GO">Goiás</option>
+                                   
