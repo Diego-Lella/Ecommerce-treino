@@ -1233,3 +1233,21 @@ body {
     }
 
 }
+/* ============================
+   CEP
+============================ */
+
+.cep-wrapper {
+    position: relative;
+}
+
+
+.cep-status {
+    display: block;
+
+    margin-top: 6px;
+
+    font-size: 12px;
+
+    color: #666;
+}
