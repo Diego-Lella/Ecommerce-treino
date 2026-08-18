@@ -475,7 +475,7 @@ if (checkoutForm) {
 
     checkoutForm.addEventListener(
         "submit",
-        event => {
+       async event => {
 
             event.preventDefault();
 
@@ -610,29 +610,87 @@ order.createdAt =
     now.toISOString();
 
 
-localStorage.setItem(
-    "lastOrder",
-    JSON.stringify(order)
-);
-
-
 // ============================
-// LIMPAR CARRINHO
+// ENVIAR PEDIDO PARA A API
 // ============================
 
-localStorage.removeItem(
-    "cart"
-);
+try {
+
+    const response =
+        await fetch(
+            "/api/orders",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body:
+                    JSON.stringify(order)
+            }
+        );
 
 
-// ============================
-// IR PARA CONFIRMAÇÃO
-// ============================
+    const data =
+        await response.json();
 
-window.location.href =
-    "pedido.html";
 
-        }
+    if (!response.ok) {
+
+        console.error(
+            "Erro ao salvar pedido:",
+            data
+        );
+
+        alert(
+            "Não foi possível registrar o pedido. Tente novamente."
+        );
+
+        return;
+
+    }
+
+
+    // ============================
+    // SALVAR LOCALMENTE
+    // ============================
+
+    localStorage.setItem(
+        "lastOrder",
+        JSON.stringify(order)
+    );
+
+
+    // ============================
+    // LIMPAR CARRINHO
+    // ============================
+
+    localStorage.removeItem(
+        "cart"
+    );
+
+
+    // ============================
+    // IR PARA CONFIRMAÇÃO
+    // ============================
+
+    window.location.href =
+        "pedido.html";
+
+
+}
+catch (error) {
+
+    console.error(
+        "Erro ao enviar pedido:",
+        error
+    );
+
+
+    alert(
+        "Erro de conexão. Tente novamente."
     );
 
 }
