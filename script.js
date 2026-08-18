@@ -35,13 +35,24 @@ const products = [
 ];
 
 
+// ============================
+// CARRINHO
+// ============================
+
 let cart = JSON.parse(
     localStorage.getItem("cart")
 ) || [];
 
 
+// ============================
+// ELEMENTOS
+// ============================
+
 const productsGrid =
     document.getElementById("productsGrid");
+
+const productContainer =
+    document.getElementById("productContainer");
 
 const cartButton =
     document.getElementById("cartButton");
@@ -65,6 +76,10 @@ const checkoutButton =
     document.getElementById("checkoutButton");
 
 
+// ============================
+// FORMATAÇÃO DE PREÇO
+// ============================
+
 function formatPrice(price) {
 
     return price.toLocaleString(
@@ -77,7 +92,15 @@ function formatPrice(price) {
 }
 
 
+// ============================
+// PRODUTOS DA HOME
+// ============================
+
 function renderProducts() {
+
+    if (!productsGrid) {
+        return;
+    }
 
     productsGrid.innerHTML = "";
 
@@ -95,14 +118,17 @@ function renderProducts() {
                 class="product-image"
                 src="${product.image}"
                 alt="${product.name}"
+                onclick="openProduct(${product.id})"
+                style="cursor: pointer;"
             >
-            <div
-            onclick="openProduct(${product.id})"
-            style="cursor: pointer;"
-             >
+
             <div class="product-info">
 
-                <h3 class="product-name">
+                <h3
+                    class="product-name"
+                    onclick="openProduct(${product.id})"
+                    style="cursor: pointer;"
+                >
                     ${product.name}
                 </h3>
 
@@ -132,12 +158,253 @@ function renderProducts() {
 }
 
 
-function addToCart(productId) {
+// ============================
+// ABRIR PRODUTO
+// ============================
+
+function openProduct(productId) {
+
+    window.location.href =
+        `produto.html?id=${productId}`;
+
+}
+
+
+// ============================
+// RENDERIZAR PÁGINA DO PRODUTO
+// ============================
+
+function renderProductPage() {
+
+    if (!productContainer) {
+        return;
+    }
+
+    const params =
+        new URLSearchParams(
+            window.location.search
+        );
+
+    const productId =
+        Number(
+            params.get("id")
+        );
 
     const product =
         products.find(
             item => item.id === productId
         );
+
+
+    // Produto não encontrado
+
+    if (!product) {
+
+        productContainer.innerHTML = `
+
+            <div class="product-not-found">
+
+                <h1>
+                    Produto não encontrado
+                </h1>
+
+                <p>
+                    Esse produto não existe.
+                </p>
+
+                <a
+                    href="index.html"
+                    class="button"
+                >
+                    Voltar para a loja
+                </a>
+
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    // Produto encontrado
+
+    productContainer.innerHTML = `
+
+        <div class="product-detail">
+
+            <div class="product-detail-image">
+
+                <img
+                    src="${product.image}"
+                    alt="${product.name}"
+                >
+
+            </div>
+
+
+            <div class="product-detail-info">
+
+                <span class="product-detail-tag">
+                    PRODUTO EM DESTAQUE
+                </span>
+
+                <h1>
+                    ${product.name}
+                </h1>
+
+                <p class="product-detail-description">
+                    ${product.description}
+                </p>
+
+                <div class="product-detail-price">
+                    R$ ${formatPrice(product.price)}
+                </div>
+
+
+                <div class="quantity-area">
+
+                    <label>
+                        Quantidade
+                    </label>
+
+                    <div class="quantity-controls">
+
+                        <button
+                            id="decreaseQuantity"
+                        >
+                            −
+                        </button>
+
+                        <span id="productQuantity">
+                            1
+                        </span>
+
+                        <button
+                            id="increaseQuantity"
+                        >
+                            +
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    class="button product-buy-button"
+                    id="addProductButton"
+                >
+                    Adicionar ao carrinho
+                </button>
+
+
+                <a
+                    href="index.html"
+                    class="back-link"
+                >
+                    ← Voltar para produtos
+                </a>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    let quantity = 1;
+
+
+    const quantityElement =
+        document.getElementById(
+            "productQuantity"
+        );
+
+    const decreaseButton =
+        document.getElementById(
+            "decreaseQuantity"
+        );
+
+    const increaseButton =
+        document.getElementById(
+            "increaseQuantity"
+        );
+
+    const addProductButton =
+        document.getElementById(
+            "addProductButton"
+        );
+
+
+    decreaseButton.addEventListener(
+        "click",
+        () => {
+
+            if (quantity > 1) {
+
+                quantity--;
+
+                quantityElement.textContent =
+                    quantity;
+
+            }
+
+        }
+    );
+
+
+    increaseButton.addEventListener(
+        "click",
+        () => {
+
+            quantity++;
+
+            quantityElement.textContent =
+                quantity;
+
+        }
+    );
+
+
+    addProductButton.addEventListener(
+        "click",
+        () => {
+
+            addToCart(
+                product.id,
+                quantity
+            );
+
+            alert(
+                "Produto adicionado ao carrinho!"
+            );
+
+        }
+    );
+
+}
+
+
+// ============================
+// ADICIONAR AO CARRINHO
+// ============================
+
+function addToCart(
+    productId,
+    quantity = 1
+) {
+
+    const product =
+        products.find(
+            item => item.id === productId
+        );
+
+
+    if (!product) {
+        return;
+    }
+
 
     const existing =
         cart.find(
@@ -147,7 +414,7 @@ function addToCart(productId) {
 
     if (existing) {
 
-        existing.quantity++;
+        existing.quantity += quantity;
 
     } else {
 
@@ -155,7 +422,7 @@ function addToCart(productId) {
 
             ...product,
 
-            quantity: 1
+            quantity: quantity
 
         });
 
@@ -168,6 +435,10 @@ function addToCart(productId) {
 
 }
 
+
+// ============================
+// REMOVER DO CARRINHO
+// ============================
 
 function removeFromCart(productId) {
 
@@ -183,6 +454,10 @@ function removeFromCart(productId) {
 }
 
 
+// ============================
+// SALVAR CARRINHO
+// ============================
+
 function saveCart() {
 
     localStorage.setItem(
@@ -193,7 +468,15 @@ function saveCart() {
 }
 
 
+// ============================
+// MOSTRAR CARRINHO
+// ============================
+
 function renderCart() {
+
+    if (!cartItems) {
+        return;
+    }
 
     cartItems.innerHTML = "";
 
@@ -248,123 +531,165 @@ function renderCart() {
     });
 
 
-    cartTotal.textContent =
-        formatPrice(total);
+    if (cartTotal) {
 
-    cartCount.textContent =
-        quantity;
+        cartTotal.textContent =
+            formatPrice(total);
+
+    }
+
+
+    if (cartCount) {
+
+        cartCount.textContent =
+            quantity;
+
+    }
 
 }
 
 
-cartButton.addEventListener(
-    "click",
-    () => {
+// ============================
+// ABRIR CARRINHO
+// ============================
 
-        cartModal.classList.add(
-            "active"
-        );
+if (cartButton && cartModal) {
 
-    }
-);
+    cartButton.addEventListener(
+        "click",
+        () => {
 
+            cartModal.classList.add(
+                "active"
+            );
 
-closeCart.addEventListener(
-    "click",
-    () => {
+        }
+    );
 
-        cartModal.classList.remove(
-            "active"
-        );
-
-    }
-);
+}
 
 
-cartModal.addEventListener(
-    "click",
-    event => {
+// ============================
+// FECHAR CARRINHO
+// ============================
 
-        if (
-            event.target === cartModal
-        ) {
+if (closeCart && cartModal) {
+
+    closeCart.addEventListener(
+        "click",
+        () => {
 
             cartModal.classList.remove(
                 "active"
             );
 
         }
+    );
 
-    }
-);
+}
 
 
-checkoutButton.addEventListener(
-    "click",
-    () => {
+// ============================
+// FECHAR CLICANDO FORA
+// ============================
 
-        if (cart.length === 0) {
+if (cartModal) {
 
-            alert(
-                "Seu carrinho está vazio."
-            );
+    cartModal.addEventListener(
+        "click",
+        event => {
 
-            return;
+            if (
+                event.target === cartModal
+            ) {
+
+                cartModal.classList.remove(
+                    "active"
+                );
+
+            }
 
         }
+    );
+
+}
 
 
-        let message =
-            "Olá! Quero fazer um pedido:%0A%0A";
+// ============================
+// CHECKOUT WHATSAPP
+// ============================
+
+if (checkoutButton) {
+
+    checkoutButton.addEventListener(
+        "click",
+        () => {
+
+            if (cart.length === 0) {
+
+                alert(
+                    "Seu carrinho está vazio."
+                );
+
+                return;
+
+            }
 
 
-        let total = 0;
+            let message =
+                "Olá! Quero fazer um pedido:%0A%0A";
+
+            let total = 0;
 
 
-        cart.forEach(item => {
+            cart.forEach(item => {
 
-            const subtotal =
-                item.price *
-                item.quantity;
+                const subtotal =
+                    item.price *
+                    item.quantity;
 
 
-            total += subtotal;
+                total += subtotal;
+
+
+                message +=
+                    `${item.quantity}x ${item.name} - R$ ${formatPrice(subtotal)}%0A`;
+
+            });
 
 
             message +=
-                `${item.quantity}x ${item.name} - R$ ${formatPrice(subtotal)}%0A`;
-
-        });
+                `%0ATotal: R$ ${formatPrice(total)}`;
 
 
-        message +=
-            `%0ATotal: R$ ${formatPrice(total)}`;
+            // TROQUE PELO WHATSAPP DA LOJA
+
+            const phone =
+                "5551999999999";
 
 
-        const phone =
-            "5551999999999";
+            const url =
+                `https://wa.me/${phone}?text=${message}`;
 
 
-        const url =
-            `https://wa.me/${phone}?text=${message}`;
+            window.open(
+                url,
+                "_blank"
+            );
+
+        }
+    );
+
+}
 
 
-        window.open(
-            url,
-            "_blank"
-        );
-
-    }
-);
-
+// ============================
+// INICIALIZAÇÃO
+// ============================
 
 renderProducts();
 
+renderProductPage();
+
 renderCart();
-
-function openProduct(productId) {
-
-    window.location.href =
-        `produto.html?id=${productId}`;
-
-}
+    
