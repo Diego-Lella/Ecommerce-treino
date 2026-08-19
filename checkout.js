@@ -513,7 +513,7 @@ if (checkoutForm) {
 
                 const response =
                     await fetch(
-                        "/api/orders.js",
+                        "/api/orders",
                         {
 
                             method: "POST",
