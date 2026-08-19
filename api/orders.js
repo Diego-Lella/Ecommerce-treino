@@ -1,14 +1,13 @@
 export default async function handler(req, res) {
-    const supabaseUrl = process.env.SUPABASE_URL;
-    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-    // ==========================================
-    // VERIFICAR CONFIGURAÇÃO
-    // ==========================================
+    const supabaseUrl =
+        process.env.SUPABASE_URL;
+
+    const supabaseKey =
+        process.env.SUPABASE_ANON_KEY;
 
     if (!supabaseUrl || !supabaseKey) {
         return res.status(500).json({
-            success: false,
             error: "Supabase não configurado"
         });
     }
@@ -16,63 +15,53 @@ export default async function handler(req, res) {
     try {
 
         // ==========================================
-        // GET — BUSCAR PEDIDO PELO UUID
-        // /api/orders?id=UUID
+        // BUSCAR PEDIDO
+        // GET /api/orders?id=UUID
         // ==========================================
 
         if (req.method === "GET") {
 
-            const orderId = req.query?.id;
+            const orderId = req.query.id;
 
             if (!orderId) {
                 return res.status(400).json({
-                    success: false,
                     error: "ID do pedido não informado"
                 });
             }
 
-            const url =
-                `${supabaseUrl}/rest/v1/orders` +
-                `?Id=eq.${encodeURIComponent(orderId)}` +
-                `&select=*`;
+            const response = await fetch(
+                `${supabaseUrl}/rest/v1/orders?Id=eq.${encodeURIComponent(orderId)}&select=*`,
+                {
+                    method: "GET",
 
-            const response = await fetch(url, {
-                method: "GET",
-
-                headers: {
-                    "apikey": supabaseKey,
-                    "Authorization": `Bearer ${supabaseKey}`
+                    headers: {
+                        "apikey": supabaseKey,
+                        "Authorization":
+                            `Bearer ${supabaseKey}`
+                    }
                 }
-            });
-
-            const text = await response.text();
-
-            let data;
-
-            try {
-                data = JSON.parse(text);
-            } catch {
-                data = null;
-            }
+            );
 
             if (!response.ok) {
 
+                const errorText =
+                    await response.text();
+
                 console.error(
-                    "Erro Supabase GET:",
-                    text
+                    "Erro Supabase:",
+                    errorText
                 );
 
                 return res.status(500).json({
-                    success: false,
-                    error: "Erro ao buscar pedido",
-                    details: text
+                    error: "Erro ao buscar pedido"
                 });
             }
 
-            if (!Array.isArray(data) || data.length === 0) {
+            const data =
+                await response.json();
 
+            if (!data.length) {
                 return res.status(404).json({
-                    success: false,
                     error: "Pedido não encontrado"
                 });
             }
@@ -85,8 +74,8 @@ export default async function handler(req, res) {
 
 
         // ==========================================
-        // POST — CRIAR PEDIDO
-        // /api/orders
+        // CRIAR PEDIDO
+        // POST /api/orders
         // ==========================================
 
         if (req.method === "POST") {
@@ -94,92 +83,25 @@ export default async function handler(req, res) {
             const order = req.body;
 
             if (!order) {
-
                 return res.status(400).json({
-                    success: false,
                     error: "Pedido não enviado"
                 });
             }
 
-
-            // ======================================
-            // VALIDAR PEDIDO
-            // ======================================
-
-            if (!order.customer) {
-
-                return res.status(400).json({
-                    success: false,
-                    error: "Cliente não informado"
-                });
-            }
-
             if (
+                !order.customer ||
                 !order.products ||
-                !Array.isArray(order.products) ||
-                order.products.length === 0
-            ) {
-
-                return res.status(400).json({
-                    success: false,
-                    error: "Produtos não informados"
-                });
-            }
-
-            if (!order.shipping) {
-
-                return res.status(400).json({
-                    success: false,
-                    error: "Frete não informado"
-                });
-            }
-
-            if (
+                !order.shipping ||
                 order.subtotal === undefined ||
                 order.total === undefined
             ) {
-
                 return res.status(400).json({
-                    success: false,
-                    error: "Valores do pedido não informados"
+                    error: "Dados do pedido incompletos"
                 });
             }
 
-
-            // ======================================
-            // NÚMERO DO PEDIDO
-            // ======================================
-
             const orderNumber =
                 "PED-" + Date.now();
-
-
-            // ======================================
-            // DADOS PARA O SUPABASE
-            // ======================================
-
-            const orderData = {
-
-                order_number: orderNumber,
-
-                customer: order.customer,
-
-                products: order.products,
-
-                shipping: order.shipping,
-
-                subtotal: Number(order.subtotal),
-
-                total: Number(order.total),
-
-                status: "pending"
-
-            };
-
-
-            // ======================================
-            // SALVAR NO SUPABASE
-            // ======================================
 
             const response = await fetch(
                 `${supabaseUrl}/rest/v1/orders`,
@@ -187,7 +109,6 @@ export default async function handler(req, res) {
                     method: "POST",
 
                     headers: {
-
                         "Content-Type":
                             "application/json",
 
@@ -199,85 +120,55 @@ export default async function handler(req, res) {
 
                         "Prefer":
                             "return=representation"
-
                     },
 
-                    body:
-                        JSON.stringify(orderData)
+                    body: JSON.stringify({
+
+                        order_number:
+                            orderNumber,
+
+                        customer:
+                            order.customer,
+
+                        products:
+                            order.products,
+
+                        shipping:
+                            order.shipping,
+
+                        subtotal:
+                            order.subtotal,
+
+                        total:
+                            order.total,
+
+                        status:
+                            "pending"
+
+                    })
                 }
             );
 
-
-            const text =
-                await response.text();
-
-
-            let data;
-
-            try {
-
-                data =
-                    JSON.parse(text);
-
-            } catch {
-
-                data = null;
-
-            }
-
-
-            // ======================================
-            // ERRO SUPABASE
-            // ======================================
-
             if (!response.ok) {
 
+                const errorText =
+                    await response.text();
+
                 console.error(
-                    "Erro Supabase POST:",
-                    text
+                    "Erro Supabase:",
+                    errorText
                 );
 
                 return res.status(500).json({
-
-                    success: false,
-
-                    error:
-                        "Erro ao salvar pedido",
-
-                    details:
-                        text
-
+                    error: "Erro ao salvar pedido"
                 });
             }
 
-
-            // ======================================
-            // VERIFICAR RESPOSTA
-            // ======================================
-
-            if (
-                !Array.isArray(data) ||
-                data.length === 0
-            ) {
-
-                return res.status(500).json({
-
-                    success: false,
-
-                    error:
-                        "Pedido salvo, mas o Supabase não retornou os dados"
-
-                });
-            }
-
+            const data =
+                await response.json();
 
             const savedOrder =
                 data[0];
-
-
-            // ======================================
-            // RETORNAR RESULTADO
-            // ======================================
 
             return res.status(201).json({
 
@@ -293,39 +184,20 @@ export default async function handler(req, res) {
         }
 
 
-        // ==========================================
-        // MÉTODO NÃO PERMITIDO
-        // ==========================================
-
         return res.status(405).json({
-
-            success: false,
-
-            error:
-                "Método não permitido"
-
+            error: "Método não permitido"
         });
 
-
-    } catch (error) {
+    }
+    catch (error) {
 
         console.error(
-            "Erro interno da API:",
+            "Erro na API:",
             error
         );
 
         return res.status(500).json({
-
-            success: false,
-
-            error:
-                "Erro interno do servidor",
-
-            details:
-                error.message
-
+            error: "Erro interno do servidor"
         });
     }
-}
-
-                        
+        }        
