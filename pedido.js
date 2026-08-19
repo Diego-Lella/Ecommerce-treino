@@ -1,18 +1,19 @@
-// ============================
-// PEGAR PEDIDO
-// ============================
+// ==========================================
+// PEGAR ID DO PEDIDO NA URL
+// ==========================================
 
-const savedOrder =
-    JSON.parse(
-        localStorage.getItem(
-            "lastOrder"
-        )
+const params =
+    new URLSearchParams(
+        window.location.search
     );
 
+const orderId =
+    params.get("id");
 
-// ============================
+
+// ==========================================
 // ELEMENTOS
-// ============================
+// ==========================================
 
 const orderNumber =
     document.getElementById(
@@ -45,9 +46,9 @@ const orderCustomer =
     );
 
 
-// ============================
+// ==========================================
 // FORMATAR PREÇO
-// ============================
+// ==========================================
 
 function formatPrice(price) {
 
@@ -62,19 +63,16 @@ function formatPrice(price) {
 }
 
 
-// ============================
-// VERIFICAR PEDIDO
-// ============================
+// ==========================================
+// MOSTRAR ERRO
+// ==========================================
 
-if (!savedOrder) {
+function showError(message) {
 
     if (orderProducts) {
 
         orderProducts.innerHTML = `
-
-            <p>
-                Nenhum pedido encontrado.
-            </p>
+            <p>${message}</p>
 
             <a
                 href="index.html"
@@ -82,176 +80,267 @@ if (!savedOrder) {
             >
                 Voltar para a loja
             </a>
-
         `;
 
     }
 
 }
+
+
+// ==========================================
+// VERIFICAR ID
+// ==========================================
+
+if (!orderId) {
+
+    showError(
+        "Nenhum pedido encontrado."
+    );
+
+}
 else {
 
+    carregarPedido();
 
-    // ========================
-    // NÚMERO
-    // ========================
-
-    if (orderNumber) {
-
-        orderNumber.textContent =
-            savedOrder.orderNumber;
-
-    }
+}
 
 
-    // ========================
-    // VALORES
-    // ========================
+// ==========================================
+// CARREGAR PEDIDO
+// ==========================================
 
-    if (orderSubtotal) {
+async function carregarPedido() {
 
-        orderSubtotal.textContent =
-            `R$ ${formatPrice(
-                savedOrder.subtotal
-            )}`;
+    try {
 
-    }
-
-
-    if (orderShipping) {
-
-        orderShipping.textContent =
-            `R$ ${formatPrice(
-                savedOrder.shipping.price
-            )}`;
-
-    }
+        const response =
+            await fetch(
+                `/api/orders?id=${encodeURIComponent(orderId)}`
+            );
 
 
-    if (orderTotal) {
+        if (!response.ok) {
 
-        orderTotal.textContent =
-            `R$ ${formatPrice(
-                savedOrder.total
-            )}`;
+            throw new Error(
+                "Pedido não encontrado"
+            );
 
-    }
-
-
-    // ========================
-    // PRODUTOS
-    // ========================
-
-    if (orderProducts) {
-
-        orderProducts.innerHTML = "";
+        }
 
 
-        savedOrder.products.forEach(
-            product => {
-
-                const item =
-                    document.createElement(
-                        "div"
-                    );
+        const result =
+            await response.json();
 
 
-                item.className =
-                    "order-product";
+        if (
+            !result.success ||
+            !result.order
+        ) {
+
+            throw new Error(
+                "Pedido não encontrado"
+            );
+
+        }
 
 
-                const itemTotal =
-                    Number(product.price) *
-                    Number(product.quantity);
+        const order =
+            result.order;
 
 
-                item.innerHTML = `
+        // ======================================
+        // CONVERTER CAMPOS JSON
+        // ======================================
 
-                    <img
-                        src="${product.image}"
-                        alt="${product.name}"
-                        width="70"
-                        height="70"
-                    >
+        const customer =
+            typeof order.customer === "string"
+                ? JSON.parse(order.customer)
+                : order.customer;
 
 
-                    <div>
+        const products =
+            typeof order.products === "string"
+                ? JSON.parse(order.products)
+                : order.products;
+
+
+        const shipping =
+            typeof order.shipping === "string"
+                ? JSON.parse(order.shipping)
+                : order.shipping;
+
+
+        // ======================================
+        // NÚMERO
+        // ======================================
+
+        if (orderNumber) {
+
+            orderNumber.textContent =
+                order.order_number;
+
+        }
+
+
+        // ======================================
+        // VALORES
+        // ======================================
+
+        if (orderSubtotal) {
+
+            orderSubtotal.textContent =
+                `R$ ${formatPrice(
+                    order.subtotal
+                )}`;
+
+        }
+
+
+        if (orderShipping) {
+
+            orderShipping.textContent =
+                `R$ ${formatPrice(
+                    shipping.price
+                )}`;
+
+        }
+
+
+        if (orderTotal) {
+
+            orderTotal.textContent =
+                `R$ ${formatPrice(
+                    order.total
+                )}`;
+
+        }
+
+
+        // ======================================
+        // PRODUTOS
+        // ======================================
+
+        if (orderProducts) {
+
+            orderProducts.innerHTML = "";
+
+
+            products.forEach(
+                product => {
+
+                    const item =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    item.className =
+                        "order-product";
+
+
+                    const itemTotal =
+                        Number(product.price) *
+                        Number(product.quantity);
+
+
+                    item.innerHTML = `
+
+                        <img
+                            src="${product.image || ""}"
+                            alt="${product.name}"
+                            width="70"
+                            height="70"
+                        >
+
+                        <div>
+
+                            <strong>
+                                ${product.name}
+                            </strong>
+
+                            <span>
+                                ${product.quantity}x
+                                R$ ${formatPrice(
+                                    product.price
+                                )}
+                            </span>
+
+                        </div>
 
                         <strong>
-                            ${product.name}
+                            R$ ${formatPrice(
+                                itemTotal
+                            )}
                         </strong>
 
-                        <span>
-                            ${product.quantity}x
-                            R$ ${formatPrice(
-                                product.price
-                            )}
-                        </span>
-
-                    </div>
+                    `;
 
 
-                    <strong>
-                        R$ ${formatPrice(
-                            itemTotal
-                        )}
-                    </strong>
+                    orderProducts.appendChild(
+                        item
+                    );
 
-                `;
+                }
+            );
+
+        }
 
 
-                orderProducts.appendChild(
-                    item
-                );
+        // ======================================
+        // ENDEREÇO
+        // ======================================
 
-            }
+        if (orderCustomer) {
+
+            orderCustomer.innerHTML = `
+
+                <strong>
+                    ${customer.name || ""}
+                </strong>
+
+                <br>
+
+                ${customer.street || ""},
+                ${customer.number || ""}
+
+                ${
+                    customer.complement
+                        ? ` - ${customer.complement}`
+                        : ""
+                }
+
+                <br>
+
+                ${customer.neighborhood || ""}
+
+                <br>
+
+                ${customer.city || ""}
+                -
+                ${customer.state || ""}
+
+                <br>
+
+                CEP:
+                ${customer.cep || ""}
+
+            `;
+
+        }
+
+
+    }
+    catch (error) {
+
+        console.error(
+            "Erro ao carregar pedido:",
+            error
+        );
+
+        showError(
+            "Não foi possível carregar este pedido."
         );
 
     }
 
-
-    // ========================
-    // ENDEREÇO
-    // ========================
-
-    if (orderCustomer) {
-
-        const customer =
-            savedOrder.customer;
-
-
-        orderCustomer.innerHTML = `
-
-            <strong>
-                ${customer.name}
-            </strong>
-
-            <br>
-
-            ${customer.street},
-            ${customer.number}
-
-            ${customer.complement
-                ? ` - ${customer.complement}`
-                : ""
-            }
-
-            <br>
-
-            ${customer.neighborhood}
-
-            <br>
-
-            ${customer.city}
-            -
-            ${customer.state}
-
-            <br>
-
-            CEP:
-            ${customer.cep}
-
-        `;
-
-    }
-
-              }
+                      }
