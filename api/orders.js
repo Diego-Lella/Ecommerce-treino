@@ -4,7 +4,7 @@ export default async function handler(req, res) {
         process.env.SUPABASE_URL;
 
     const supabaseKey =
-    process.env.SUPABASE_SERVICE_ROLE_KEY;
+        process.env.SUPABASE_SERVICE_ROLE_KEY;
     
     if (!supabaseUrl || !supabaseKey) {
         return res.status(500).json({
