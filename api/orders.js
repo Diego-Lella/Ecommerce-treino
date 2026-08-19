@@ -108,7 +108,7 @@ export default async function handler(req, res) {
             success: true,
 
             orderId:
-                savedOrder.id,
+                savedOrder.Id,
 
             orderNumber:
                 savedOrder.order_number
