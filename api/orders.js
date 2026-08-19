@@ -1,121 +1,195 @@
 export default async function handler(req, res) {
 
-    if (req.method !== "POST") {
-        return res.status(405).json({
-            error: "Método não permitido"
+    const supabaseUrl =
+        process.env.SUPABASE_URL;
+
+    const supabaseKey =
+        process.env.SUPABASE_ANON_KEY;
+
+    if (!supabaseUrl || !supabaseKey) {
+        return res.status(500).json({
+            error: "Supabase não configurado"
         });
     }
 
     try {
 
-        const order = req.body;
+        // ==========================================
+        // BUSCAR PEDIDO
+        // GET /api/orders?id=UUID
+        // ==========================================
 
-        if (!order) {
-            return res.status(400).json({
-                error: "Pedido não enviado"
-            });
-        }
+        if (req.method === "GET") {
 
-        if (
-            !order.customer ||
-            !order.products ||
-            !order.shipping ||
-            order.subtotal === undefined ||
-            order.total === undefined
-        ) {
-            return res.status(400).json({
-                error: "Dados do pedido incompletos"
-            });
-        }
+            const orderId = req.query.id;
 
-        const supabaseUrl =
-            process.env.SUPABASE_URL;
-
-        const supabaseKey =
-            process.env.SUPABASE_ANON_KEY;
-
-        if (!supabaseUrl || !supabaseKey) {
-            return res.status(500).json({
-                error: "Supabase não configurado"
-            });
-        }
-
-        const orderNumber =
-            "PED-" +
-            Date.now();
-
-        const response = await fetch(
-            `${supabaseUrl}/rest/v1/orders`,
-            {
-                method: "POST",
-
-                headers: {
-                    "Content-Type": "application/json",
-                    "apikey": supabaseKey,
-                    "Authorization": `Bearer ${supabaseKey}`,
-                    "Prefer": "return=representation"
-                },
-
-                body: JSON.stringify({
-
-                    order_number: orderNumber,
-
-                    customer:
-                        order.customer,
-
-                    products:
-                        order.products,
-
-                    shipping:
-                        order.shipping,
-
-                    subtotal:
-                        order.subtotal,
-
-                    total:
-                        order.total,
-
-                    status:
-                        "pending"
-
-                })
+            if (!orderId) {
+                return res.status(400).json({
+                    error: "ID do pedido não informado"
+                });
             }
-        );
 
-        if (!response.ok) {
+            const response = await fetch(
+                `${supabaseUrl}/rest/v1/orders?Id=eq.${encodeURIComponent(orderId)}&select=*`,
+                {
+                    method: "GET",
 
-            const errorText =
-                await response.text();
-
-            console.error(
-                "Erro Supabase:",
-                errorText
+                    headers: {
+                        "apikey": supabaseKey,
+                        "Authorization":
+                            `Bearer ${supabaseKey}`
+                    }
+                }
             );
 
-            return res.status(500).json({
-                error: "Erro ao salvar pedido"
+            if (!response.ok) {
+
+                const errorText =
+                    await response.text();
+
+                console.error(
+                    "Erro Supabase:",
+                    errorText
+                );
+
+                return res.status(500).json({
+                    error: "Erro ao buscar pedido"
+                });
+            }
+
+            const data =
+                await response.json();
+
+            if (!data.length) {
+                return res.status(404).json({
+                    error: "Pedido não encontrado"
+                });
+            }
+
+            return res.status(200).json({
+                success: true,
+                order: data[0]
             });
         }
 
-        const data =
-            await response.json();
 
-        const savedOrder =
-            data[0];
+        // ==========================================
+        // CRIAR PEDIDO
+        // POST /api/orders
+        // ==========================================
 
-        return res.status(201).json({
+        if (req.method === "POST") {
 
-            success: true,
+            const order = req.body;
 
-            orderId:
-                savedOrder.Id,
+            if (!order) {
+                return res.status(400).json({
+                    error: "Pedido não enviado"
+                });
+            }
 
-            orderNumber:
-                savedOrder.order_number
+            if (
+                !order.customer ||
+                !order.products ||
+                !order.shipping ||
+                order.subtotal === undefined ||
+                order.total === undefined
+            ) {
+                return res.status(400).json({
+                    error: "Dados do pedido incompletos"
+                });
+            }
 
+            const orderNumber =
+                "PED-" + Date.now();
+
+            const response = await fetch(
+                `${supabaseUrl}/rest/v1/orders`,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json",
+
+                        "apikey":
+                            supabaseKey,
+
+                        "Authorization":
+                            `Bearer ${supabaseKey}`,
+
+                        "Prefer":
+                            "return=representation"
+                    },
+
+                    body: JSON.stringify({
+
+                        order_number:
+                            orderNumber,
+
+                        customer:
+                            order.customer,
+
+                        products:
+                            order.products,
+
+                        shipping:
+                            order.shipping,
+
+                        subtotal:
+                            order.subtotal,
+
+                        total:
+                            order.total,
+
+                        status:
+                            "pending"
+
+                    })
+                }
+            );
+
+            if (!response.ok) {
+
+                const errorText =
+                    await response.text();
+
+                console.error(
+                    "Erro Supabase:",
+                    errorText
+                );
+
+                return res.status(500).json({
+                    error: "Erro ao salvar pedido"
+                });
+            }
+
+            const data =
+                await response.json();
+
+            const savedOrder =
+                data[0];
+
+            return res.status(201).json({
+
+                success: true,
+
+                orderId:
+                    savedOrder.Id,
+
+                orderNumber:
+                    savedOrder.order_number
+
+            });
+        }
+
+
+        return res.status(405).json({
+            error: "Método não permitido"
         });
 
-    } catch (error) {
+    }
+    catch (error) {
 
         console.error(
             "Erro na API:",
@@ -125,7 +199,7 @@ export default async function handler(req, res) {
         return res.status(500).json({
             error: "Erro interno do servidor"
         });
-
     }
+                        }
 
-}
+
