@@ -2887,3 +2887,298 @@ body {
     }
 
 }
+/* =========================================
+   CARROSSEL DE OFERTAS DA HERO
+========================================= */
+
+.hero-offers {
+    width: 100%;
+    max-width: 560px;
+    padding: 20px;
+    border-radius: 24px;
+
+    background: rgba(255, 255, 255, 0.95);
+
+    border: 1px solid #eeeeee;
+
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.12);
+}
+
+
+/* Cabeçalho da oferta */
+
+.hero-offer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.offer-small-title {
+    display: block;
+
+    font-size: 10px;
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+
+    color: #777;
+}
+
+.hero-offer-header h2 {
+    margin-top: 5px;
+
+    font-size: 25px;
+}
+
+
+/* Botões ← → */
+
+.offer-arrows {
+    display: flex;
+    gap: 7px;
+}
+
+.hero-arrow {
+    width: 38px;
+    height: 38px;
+
+    border: 1px solid #ddd;
+
+    border-radius: 50%;
+
+    background: #fff;
+
+    color: #111;
+
+    font-size: 18px;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+.hero-arrow:hover {
+    background: #111;
+    color: #fff;
+    border-color: #111;
+}
+
+
+/* =========================================
+   ÁREA DO CARROSSEL
+========================================= */
+
+.hero-carousel {
+    display: flex;
+
+    overflow-x: auto;
+
+    scroll-snap-type: x mandatory;
+
+    scrollbar-width: none;
+
+    border-radius: 18px;
+
+    touch-action: pan-x;
+
+    cursor: grab;
+}
+
+.hero-carousel:active {
+    cursor: grabbing;
+}
+
+.hero-carousel::-webkit-scrollbar {
+    display: none;
+}
+
+
+/* =========================================
+   CARD DA OFERTA
+========================================= */
+
+.hero-offer-card {
+    min-width: 100%;
+
+    scroll-snap-align: center;
+
+    display: grid;
+
+    grid-template-columns:
+        0.9fr 1.1fr;
+
+    gap: 22px;
+
+    padding: 20px;
+
+    border-radius: 18px;
+
+    background: #f7f7f7;
+}
+
+
+/* Imagem */
+
+.hero-offer-image-area {
+    position: relative;
+
+    min-height: 300px;
+
+    overflow: hidden;
+
+    border-radius: 15px;
+
+    background: #eaeaea;
+}
+
+.hero-offer-image {
+    width: 100%;
+    height: 100%;
+
+    min-height: 300px;
+
+    display: block;
+
+    object-fit: cover;
+}
+
+
+/* Badge */
+
+.hero-offer-badge {
+    position: absolute;
+
+    top: 12px;
+    left: 12px;
+
+    z-index: 2;
+
+    padding: 7px 10px;
+
+    border-radius: 50px;
+
+    background: #111;
+
+    color: #fff;
+
+    font-size: 10px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+}
+
+
+/* =========================================
+   INFORMAÇÕES DO PRODUTO
+========================================= */
+
+.hero-offer-info {
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+}
+
+.hero-offer-category {
+    margin-bottom: 8px;
+
+    color: #777;
+
+    font-size: 11px;
+
+    font-weight: bold;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1px;
+}
+
+.hero-offer-name {
+    margin-bottom: 10px;
+
+    font-size: 30px;
+
+    line-height: 1.05;
+}
+
+.hero-offer-description {
+    margin-bottom: 15px;
+
+    color: #666;
+
+    font-size: 14px;
+
+    line-height: 1.5;
+}
+
+
+/* Estrelas */
+
+.hero-stars {
+    margin-bottom: 12px;
+
+    font-size: 14px;
+}
+
+
+/* Preços */
+
+.hero-old-price {
+    color: #999;
+
+    font-size: 13px;
+
+    text-decoration: line-through;
+}
+
+.hero-price {
+    display: block;
+
+    margin: 4px 0 17px;
+
+    font-size: 29px;
+
+    font-weight: 900;
+}
+
+
+/* Botão comprar */
+
+.hero-buy-button {
+    width: 100%;
+
+    text-align: center;
+}
+
+
+/* =========================================
+   BOLINHAS
+========================================= */
+
+.hero-dots {
+    display: flex;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    margin-top: 15px;
+}
+
+.hero-dot {
+    width: 7px;
+    height: 7px;
+
+    padding: 0;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: #
