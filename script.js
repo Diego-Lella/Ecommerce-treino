@@ -1086,3 +1086,76 @@ renderProducts();
 renderProductPage();
 
 renderCart();
+/* =========================================
+   CARROSSEL DE OFERTAS DA HERO
+========================================= */
+
+const heroCarousel = document.getElementById("heroCarousel");
+const heroDots = document.getElementById("heroDots");
+const heroPrev = document.getElementById("heroPrev");
+const heroNext = document.getElementById("heroNext");
+
+let currentHeroIndex = 0;
+
+
+/*
+    Produtos que aparecerão na Hero.
+
+    O primeiro produto será o
+    PRODUTO CAMPEÃO.
+*/
+
+const heroProducts = products.slice(0, 4);
+
+
+/* =========================================
+   RENDERIZAR CARROSSEL
+========================================= */
+
+function renderHeroCarousel() {
+
+    if (!heroCarousel || !heroDots) {
+        return;
+    }
+
+    heroCarousel.innerHTML = "";
+    heroDots.innerHTML = "";
+
+
+    heroProducts.forEach((product, index) => {
+
+        const card = document.createElement("article");
+
+        card.className = "hero-offer-card";
+
+
+        /*
+            Preço antigo apenas para criar
+            o efeito visual de promoção.
+
+            Depois vamos colocar os preços
+            reais das ofertas.
+        */
+
+        const oldPrice = product.price * 1.25;
+
+
+        card.innerHTML = `
+
+            <div class="hero-offer-image-area">
+
+                <span class="hero-offer-badge">
+
+                    ${index === 0
+                        ? "🔥 CAMPEÃO"
+                        : "OFERTA"
+                    }
+
+                </span>
+
+
+                <img
+                    class="hero-offer-image"
+                    src="${product.image}"
+                    alt="${product.name}"
+                    loading="${index === 0
