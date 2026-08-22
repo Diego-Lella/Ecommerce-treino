@@ -1349,3 +1349,202 @@ button {
 }
 
 .product-detail-t
+/* =========================================================
+   HERO — SOMENTE CARROSSEL DE OFERTAS
+========================================================= */
+
+.hero {
+    min-height: auto;
+    padding: 45px 0;
+}
+
+.hero-content {
+    padding: 20px 0;
+}
+
+.hero-text {
+    display: none;
+}
+
+/* Carrossel centralizado */
+.hero .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hero-offers {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+
+    padding: 18px;
+
+    border-radius: 24px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 20px 70px rgba(0, 0, 0, 0.25);
+}
+
+
+/* =========================================================
+   CARROSSEL
+========================================================= */
+
+.hero-carousel {
+    width: 100%;
+}
+
+
+/* =========================================================
+   CARD
+========================================================= */
+
+.hero-offer-card {
+    min-width: 100%;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 25px;
+
+    padding: 18px;
+
+    background: #f7f7f7;
+}
+
+
+/* =========================================================
+   IMAGEM
+========================================================= */
+
+.hero-offer-image-area {
+    min-height: 360px;
+}
+
+.hero-offer-image {
+    min-height: 360px;
+}
+
+
+/* =========================================================
+   INFORMAÇÕES
+========================================================= */
+
+.hero-offer-info {
+    padding: 15px;
+}
+
+.hero-offer-name {
+    font-size: 34px;
+}
+
+.hero-offer-description {
+    font-size: 15px;
+}
+
+.hero-price {
+    font-size: 32px;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .hero {
+        padding: 20px 0 30px;
+    }
+
+    .hero-content {
+        padding: 10px 0;
+    }
+
+    .hero-offers {
+        width: 100%;
+        padding: 10px;
+        border-radius: 18px;
+    }
+
+    .hero-offer-card {
+        display: flex;
+        flex-direction: column;
+
+        gap: 12px;
+
+        padding: 10px;
+    }
+
+    .hero-offer-image-area {
+        min-height: 240px;
+        max-height: 260px;
+    }
+
+    .hero-offer-image {
+        min-height: 240px;
+        max-height: 260px;
+    }
+
+    .hero-offer-info {
+        padding: 8px 5px 5px;
+    }
+
+    .hero-offer-category {
+        margin-bottom: 5px;
+    }
+
+    .hero-offer-name {
+        margin-bottom: 7px;
+        font-size: 24px;
+    }
+
+    .hero-offer-description {
+        margin-bottom: 8px;
+        font-size: 13px;
+    }
+
+    .hero-stars {
+        margin-bottom: 6px;
+    }
+
+    .hero-price {
+        margin: 3px 0 10px;
+        font-size: 25px;
+    }
+
+    .hero-buy-button {
+        padding: 13px;
+    }
+
+}
+
+
+/* =========================================================
+   CELULAR PEQUENO
+========================================================= */
+
+@media (max-width: 380px) {
+
+    .hero-offer-image-area {
+        min-height: 210px;
+        max-height: 230px;
+    }
+
+    .hero-offer-image {
+        min-height: 210px;
+        max-height: 230px;
+    }
+
+    .hero-offer-name {
+        font-size: 21px;
+    }
+
+    .hero-price {
+        font-size: 23px;
+    }
+
+}
